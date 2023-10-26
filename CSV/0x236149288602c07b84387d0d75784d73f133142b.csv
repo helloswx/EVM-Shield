@@ -1,0 +1,17 @@
+Function Name,State Variables Modified,Can Transfer Ether
+"tokenFallback(address,uint,bytes)",,False
+"giveSticker(address,uint256)",,False
+constructor(address),"stickers, totalSupply",True
+setNewOwner(address),,False
+acceptNewOwner(),,True
+"addBeneficiary(address,uint256)","IcoStartTime, beneficiaryWithdrawAmount, beneficiaryWithdrawAmount, MAX_UINT256, beneficiaryShares, beneficiaryTotalShares",False
+"removeBeneficiary(address,uint256)","IcoStartTime, beneficiaryWithdrawAmount, beneficiaryWithdrawAmount, beneficiaryShares, beneficiaryTotalShares",False
+withdrawFunding(uint256),"icoFunding, fundingCap, IcoEndTime, icoFunding, beneficiaryWithdrawAmount, beneficiaryWithdrawAmount, beneficiaryPayoutPerShare, beneficiaryShares, beneficiaryWithdrawAmount, MAX_UINT256, beneficiaryWithdrawAmount, beneficiaryWithdrawAmount",True
+"function()payableexternal{require(block.timestamp>=IcoStartTime,""ICO hasn't started yet"");require(icoFunding==0&&block.timestamp<IcoEndTime,""ICO has ended"");require(msg.value!=0&&((msg.value%TOKEN_PRICE)==0),""Must be a multiple of 0.0001 ETH"");uint256thisBalance=address(this).balance;uint256msgValue=msg.value;if(thisBalance>fundingCap){msgValue-=(thisBalance-fundingCap);require(msgValue!=0,""Funding cap has been reached"");thisBalance=fundingCap;}uint256oldBalance=thisBalance-msgValue;uint256tokensToGive=(msgValue/TOKEN_PRICE)*1e18;uint256bonusTokens;uint256difference;while(oldBalance<thisBalance){if(oldBalance<500ether){difference=min(500ether,thisBalance)-oldBalance;bonusTokens+=((difference/TOKEN_PRICE)*1e18)/2;oldBalance+=difference;}elseif(oldBalance<1250ether){difference=min(1250ether,thisBalance)-oldBalance;bonusTokens+=((difference/TOKEN_PRICE)*1e18)/5;oldBalance+=difference;}else{difference=thisBalance-oldBalance;bonusTokens+=((difference/TOKEN_PRICE)*1e18)/10;oldBalance+=difference;}}emitonICOBuy(msg.sender,tokensToGive,bonusTokens);tokensToGive+=bonusTokens;balanceOf[msg.sender]+=tokensToGive;totalSupply+=tokensToGive;if(address(stickers)!=address(0)){stickers.giveSticker(msg.sender,msgValue);}emitTransfer(address(this),msg.sender,tokensToGive,"""");emitTransfer(address(this),msg.sender,tokensToGive);beneficiaryPayoutPerShare=thisBalance/beneficiaryTotalShares;etherSpent[msg.sender]+=msgValue;if(msgValue!=msg.value){msg.sender.transfer(msg.value-msgValue);}}()","IcoStartTime, icoFunding, IcoEndTime, TOKEN_PRICE, fundingCap, fundingCap, fundingCap, TOKEN_PRICE, TOKEN_PRICE, TOKEN_PRICE, TOKEN_PRICE, balanceOf, totalSupply, stickers, stickers, beneficiaryPayoutPerShare, beneficiaryTotalShares, etherSpent",True
+"transfer(address,uint,bytes,string)",,True
+"transfer(address,uint,bytes)",,True
+"transfer(address,uint)",,True
+"approve(address,uint)",allowances,True
+"transferFrom(address,address,uint)","allowances, allowances",True
+beneficiaryStash(address),"beneficiaryWithdrawAmount, MAX_UINT256, beneficiaryPayoutPerShare, beneficiaryShares, beneficiaryPayoutPerShare, beneficiaryShares",False
+"allowance(address,address)",allowances,False

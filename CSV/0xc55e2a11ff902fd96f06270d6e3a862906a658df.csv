@@ -1,0 +1,13 @@
+Function Name,State Variables Modified,Can Transfer Ether
+constructor(),"owner, devAddress, advertiserAddress, addresses, myEtherFundControl, myEtherFundControl",True
+setAdvertiserAddr(address),advertiserAddress,False
+transferOwnership(address),owner,False
+setMyEtherFundControlStartAt(uint),myEtherFundControl,False
+getMyEtherFundControlStartAt(),myEtherFundControl,False
+setGrowingMaxPerDay(uint),"myEtherFundControl, myEtherFundControl, devAddress, myEtherFundControl",True
+"function()payableexternal{if(isContract()){revert();}if(pause){doRestart();msg.sender.transfer(msg.value);return;}if(0==msg.value){payoutDividends();return;}require(msg.value>=MIN_INVEST,""Too small amount, minimum 0.01 ether"");Investorstorageuser=investors[msg.sender];if(user.id==0){user.id=addresses.push(msg.sender);user.date=now;addresspayablereferrer=bytesToAddress(msg.data);if(investors[referrer].deposit>0&&referrer!=msg.sender){user.referrer=referrer;}}else{payoutDividends();}uintinvestment=min(myEtherFundControl.getMaxInvestmentToday(),msg.value);require(investment>0,""Too much investments today"");user.deposit+=investment;user.deposits+=1;emitInvest(msg.sender,investment,user.referrer);depositAmount+=investment;lastPaymentDate=now;if(devAddress.send(investment/100*devCommission)){}if(advertiserAddress.send(investment/100*advertisingCommission)){}uintbonusAmount=investment/100*currentInterest;if(user.referrer!=address(0)){if(user.referrer.send(bonusAmount)){emitPayout(user.referrer,bonusAmount,""referral"",msg.sender);}if(user.deposits==1){if(msg.sender.send(bonusAmount)){emitPayout(msg.sender,bonusAmount,""cash-back"",address(0));}}}elseif(top_investor.addr!=address(0)&&top_investor.from+24hours>now){if(top_investor.addr.send(bonusAmount)){emitPayout(top_investor.addr,bonusAmount,""perseus"",msg.sender);}}considerCurrentInterest();myEtherFundControl.addInvestment(investment);considerTopInvestor(investment);if(msg.value>investment){msg.sender.transfer(msg.value-investment);}}()","pause, MIN_INVEST, investors, addresses, investors, myEtherFundControl, depositAmount, lastPaymentDate, devAddress, devCommission, advertiserAddress, advertisingCommission, currentInterest, top_investor, top_investor, top_investor, top_investor, myEtherFundControl",True
+getTodayInvestment(),myEtherFundControl,False
+getMaximumInvestmentPerDay(),myEtherFundControl,False
+getInvestorCount(),addresses,False
+getInvestorDividendsAmount(address),"investors, investors, currentInterest",False
+"min(uint,uint)",,False

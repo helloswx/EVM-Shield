@@ -1,0 +1,34 @@
+Function Name,State Variables Modified,Can Transfer Ether
+HouseOwned(),,True
+totalSupply(),,False
+balanceOf(address),,False
+"allowance(address,address)",,False
+"transfer(address,uint)",,False
+"approve(address,uint)",,False
+"transferFrom(address,address,uint)",,False
+Token(),"name, symbol, supply",False
+setJackpot(address),"jackpot, jackpot, supply, balances, balances, jackpot, supply, croupier, jackpot",False
+"returnDeposit(address,uint256)","depositOf, depositOf, depositOf, totalDeposit, totalDeposit, croupier",True
+balanceOf(address),balances,False
+totalSupply(),supply,False
+"transfer(address,uint256)","jackpot, croupier, jackpot, jackpot, croupier, depositOf, totalDeposit, totalDeposit, depositOf",True
+"transferFrom(address,address,uint256)","balances, allowed, balances, balances, balances, balances, allowed, allowed",True
+"approve(address,uint256)",allowed,True
+"allowance(address,address)",allowed,False
+"increaseApproval(address,uint)","allowed, allowed, allowed",True
+"decreaseApproval(address,uint)","allowed, allowed, allowed, allowed",True
+"freezeDeposit(address,uint256)","depositOf, depositOf, depositOf, depositOf, totalDeposit, totalDeposit, frozenPool, frozenPool",False
+"unfreezeDeposit(address,uint256)","frozenPool, depositOf, depositOf, totalDeposit, totalDeposit, frozenPool, frozenPool, depositOf",False
+"transferFromCroupier(address,uint256)","frozenPool, frozenPool, frozenPool, croupier",True
+Jackpot(address),"croupier, lastBetUser",False
+setToken(address),"token, token",False
+"function()payablepublic{require(croupier!=0x0);require(address(token)!=0x0);require(stage!=Stages.Aborted);uint256tokens;if(stage==Stages.InitialOffer){boolstarted=checkGameStart();if(started){msg.sender.transfer(msg.value);return;}require(msg.value>=currentIcoTokenPrice);tokens=_icoTokensForEther(msg.value);EtherIco(msg.sender,msg.value,tokens);investmentOf[msg.sender]=investmentOf[msg.sender].add(msg.value.sub(msg.value/5));if(icoEndTime==0&&this.balance>=gameStartJackpotThreshold){icoEndTime=now+icoTerminationTimeout;}if(tokens>0){token.transfer(msg.sender,tokens);}house.transfer(msg.value/5);}elseif(stage==Stages.GameOn){boolterminated=checkTermination();if(terminated){msg.sender.transfer(msg.value);return;}require(msg.value>=currentBetAmount);tokens=_betTokensForEther(msg.value);uint256sellingFromJackpot=0;uint256sellingFromCroupier=0;if(tokens>0){uint256croupierPool=token.frozenPool();uint256jackpotPool=token.balanceOf(this);if(croupierPool==0){sellingFromJackpot=tokens;if(sellingFromJackpot>jackpotPool){sellingFromJackpot=jackpotPool;}}elseif(jackpotPool==0||tokens<=croupierPool){sellingFromCroupier=tokens;if(sellingFromCroupier>croupierPool){sellingFromCroupier=croupierPool;}}else{sellingFromCroupier=croupierPool;sellingFromJackpot=tokens.sub(sellingFromCroupier);if(sellingFromJackpot>jackpotPool){sellingFromJackpot=jackpotPool;}}}uint256tokenValue=msg.value.sub(currentBetAmount);uint256croupierSaleRevenue=0;if(sellingFromCroupier>0){croupierSaleRevenue=tokenValue.div(sellingFromJackpot.add(sellingFromCroupier)).mul(sellingFromCroupier);}uint256jackpotSaleRevenue=tokenValue.sub(croupierSaleRevenue);uint256dividends=(currentBetAmount.div(4)).add(jackpotSaleRevenue.div(2));pendingEtherForCroupier=pendingEtherForCroupier.add(dividends.add(croupierSaleRevenue));EtherBet(msg.sender,msg.value,dividends);lastBetUser=msg.sender;terminationTime=now+_terminationDuration();if(croupierSaleRevenue>0){SoldTokensFromCroupier(msg.sender,croupierSaleRevenue,sellingFromCroupier);}_checkMinorPrizes(msg.sender,currentBetAmount);_updateBetAmount();if(sellingFromJackpot>0){token.transfer(msg.sender,sellingFromJackpot);}if(sellingFromCroupier>0){token.transferFromCroupier(msg.sender,sellingFromCroupier);}}elseif(stage==Stages.GameOver){require(msg.sender==winner||msg.sender==house);if(msg.sender==winner){require(pendingJackpotForWinner>0);uint256winnersPay=pendingJackpotForWinner;pendingJackpotForWinner=0;msg.sender.transfer(winnersPay);}elseif(msg.sender==house){require(pendingJackpotForHouse>0);uint256housePay=pendingJackpotForHouse;pendingJackpotForHouse=0;msg.sender.transfer(housePay);}}}()","croupier, token, stage, stage, currentIcoTokenPrice, investmentOf, investmentOf, icoEndTime, icoEndTime, token, stage, currentBetAmount, token, token, currentBetAmount, currentBetAmount, pendingEtherForCroupier, pendingEtherForCroupier, lastBetUser, terminationTime, currentBetAmount, token, token, stage, winner, winner, pendingJackpotForWinner, pendingJackpotForWinner, pendingJackpotForWinner, pendingJackpotForHouse, pendingJackpotForHouse, pendingJackpotForHouse",True
+payOutJackpot(),"winner, pendingJackpotForHouse, pendingJackpotForHouse, pendingJackpotForHouse, pendingJackpotForWinner, pendingJackpotForWinner, pendingJackpotForWinner, winner",True
+shouldBeTerminated(),"stage, terminationTime, terminationTime",False
+checkTermination(),"stage, winner, lastBetUser, winner, pendingJackpotForHouse, jackpot, pendingJackpotForWinner, jackpot, pendingJackpotForHouse",False
+shouldBeStarted(),"stage, icoEndTime, icoEndTime",False
+checkGameStart(),stage,False
+betToken(address),"stage, lastBetUser, terminationTime",False
+abort(),"stage, stage, abortTime",False
+claimRefund(),"stage, investmentOf, investmentOf, investmentOf",True
+killAborted(),"stage, abortTime",False
