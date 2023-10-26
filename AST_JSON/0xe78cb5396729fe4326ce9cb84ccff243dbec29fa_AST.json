@@ -1,0 +1,2453 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.11"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "dapEscrow",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StructDefinition",
+                    "name": "Bid",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bytes32"
+                            },
+                            "name": "name",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "oracle",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "seller",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "buyer",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "price",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "timeout",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "UserDefinedTypeName",
+                                "namePath": "dealStatus"
+                            },
+                            "name": "status",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "fee",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "isLimited",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "EnumDefinition",
+                    "name": "dealStatus",
+                    "members": [
+                        {
+                            "type": "EnumValue",
+                            "name": "unPaid"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Pending"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Closed"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Rejected"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Refund"
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "UserDefinedTypeName",
+                                        "namePath": "Bid"
+                                    },
+                                    "length": null
+                                }
+                            },
+                            "name": "bids",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "pendingWithdrawals",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "amountRecieved",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "bidClosed",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "bidCreated",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "name",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "refundDone",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "withdrawDone",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "person",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "amount",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "bidRejected",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getBidIndex",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "name",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint8"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "bids"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "seller"
+                                            }
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "seller"
+                                                            }
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    },
+                                                    "memberName": "name"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "name"
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getBidsNum",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidsNum",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "bids"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "seller"
+                                    }
+                                },
+                                "memberName": "length"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "sendAmount",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "Bid"
+                                        },
+                                        "name": "a",
+                                        "storageLocation": "storage"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bids"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "bidId"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "value"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "a"
+                                                    },
+                                                    "memberName": "price"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "a"
+                                                    },
+                                                    "memberName": "status"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "dealStatus"
+                                                    },
+                                                    "memberName": "unPaid"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "memberName": "isLimited"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "require"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "BinaryOperation",
+                                                        "operator": ">",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "a"
+                                                            },
+                                                            "memberName": "timeout"
+                                                        },
+                                                        "right": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "block"
+                                                            },
+                                                            "memberName": "number"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "memberName": "status"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "dealStatus"
+                                        },
+                                        "memberName": "Pending"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "amountRecieved"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "bidId"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "createBid",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "name",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "oracle",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "buyer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "price",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "timeout",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "fee",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "!=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "name"
+                                                    },
+                                                    "memberName": "length"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "!=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "price"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "bool"
+                                        },
+                                        "name": "limited",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BooleanLiteral",
+                                    "value": true
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "timeout"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "limited"
+                                                },
+                                                "right": {
+                                                    "type": "BooleanLiteral",
+                                                    "value": false
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "bids"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "seller"
+                                            }
+                                        },
+                                        "memberName": "push"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "Bid"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "name"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "oracle"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "seller"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "buyer"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "price"
+                                                },
+                                                {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "block"
+                                                        },
+                                                        "memberName": "number"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "timeout"
+                                                    }
+                                                },
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "dealStatus"
+                                                    },
+                                                    "memberName": "unPaid"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "fee"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "limited"
+                                                }
+                                            ],
+                                            "names": [
+                                                "name",
+                                                "oracle",
+                                                "seller",
+                                                "buyer",
+                                                "price",
+                                                "timeout",
+                                                "status",
+                                                "fee",
+                                                "isLimited"
+                                            ]
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "bidId",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BinaryOperation",
+                                    "operator": "-",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "bids"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "seller"
+                                            }
+                                        },
+                                        "memberName": "length"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "1",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "bidCreated"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "name"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "bidId"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "closeBid",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "Bid"
+                                        },
+                                        "name": "bid",
+                                        "storageLocation": "storage"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bids"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "bidId"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bid"
+                                        },
+                                        "memberName": "isLimited"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "require"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "BinaryOperation",
+                                                        "operator": ">",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "bid"
+                                                            },
+                                                            "memberName": "timeout"
+                                                        },
+                                                        "right": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "block"
+                                                            },
+                                                            "memberName": "number"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "bid"
+                                                    },
+                                                    "memberName": "oracle"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "bid"
+                                                    },
+                                                    "memberName": "status"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "dealStatus"
+                                                    },
+                                                    "memberName": "Pending"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bid"
+                                        },
+                                        "memberName": "status"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "dealStatus"
+                                        },
+                                        "memberName": "Closed"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "pendingWithdrawals"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "seller"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "-",
+                                        "left": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "price"
+                                        },
+                                        "right": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "fee"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "pendingWithdrawals"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "oracle"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bid"
+                                        },
+                                        "memberName": "fee"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "withdraw"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "seller"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "withdraw"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "oracle"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "bidClosed"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "bidId"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "refund",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "&&",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "&&",
+                                                    "left": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "==",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "bids"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "seller"
+                                                                    }
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bidId"
+                                                                }
+                                                            },
+                                                            "memberName": "buyer"
+                                                        },
+                                                        "right": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "msg"
+                                                            },
+                                                            "memberName": "sender"
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "==",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "bids"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "seller"
+                                                                    }
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bidId"
+                                                                }
+                                                            },
+                                                            "memberName": "isLimited"
+                                                        },
+                                                        "right": {
+                                                            "type": "BooleanLiteral",
+                                                            "value": true
+                                                        }
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "<",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bids"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "seller"
+                                                                }
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "bidId"
+                                                            }
+                                                        },
+                                                        "memberName": "timeout"
+                                                    },
+                                                    "right": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "block"
+                                                        },
+                                                        "memberName": "number"
+                                                    }
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "seller"
+                                                            }
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "bidId"
+                                                        }
+                                                    },
+                                                    "memberName": "status"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "dealStatus"
+                                                    },
+                                                    "memberName": "Pending"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "Bid"
+                                        },
+                                        "name": "a",
+                                        "storageLocation": "storage"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bids"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "bidId"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "memberName": "status"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "dealStatus"
+                                        },
+                                        "memberName": "Refund"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "pendingWithdrawals"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            },
+                                            "memberName": "buyer"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "memberName": "price"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "withdraw"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            },
+                                            "memberName": "buyer"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "refundDone"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "bidId"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "rejectBid",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "seller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "bidId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "bids"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "seller"
+                                                }
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "bidId"
+                                            }
+                                        },
+                                        "memberName": "isLimited"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "require"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "BinaryOperation",
+                                                        "operator": ">",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "bids"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "seller"
+                                                                    }
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bidId"
+                                                                }
+                                                            },
+                                                            "memberName": "timeout"
+                                                        },
+                                                        "right": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "block"
+                                                            },
+                                                            "memberName": "number"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "seller"
+                                                            }
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "bidId"
+                                                        }
+                                                    },
+                                                    "memberName": "oracle"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "seller"
+                                                            }
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "bidId"
+                                                        }
+                                                    },
+                                                    "memberName": "status"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "dealStatus"
+                                                    },
+                                                    "memberName": "Pending"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "Bid"
+                                        },
+                                        "name": "bid",
+                                        "storageLocation": "storage"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bids"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "bidId"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bid"
+                                        },
+                                        "memberName": "status"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "dealStatus"
+                                        },
+                                        "memberName": "Rejected"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "pendingWithdrawals"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "oracle"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bid"
+                                        },
+                                        "memberName": "fee"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "pendingWithdrawals"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "buyer"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "-",
+                                        "left": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "price"
+                                        },
+                                        "right": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "fee"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "withdraw"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "buyer"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "withdraw"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "bid"
+                                            },
+                                            "memberName": "oracle"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "bidRejected"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "seller"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "bidId"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "withdraw",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "person",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "amount",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "pendingWithdrawals"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "person"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "pendingWithdrawals"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "person"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "person"
+                                        },
+                                        "memberName": "transfer"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "amount"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "withdrawDone"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "person"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "amount"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "private",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

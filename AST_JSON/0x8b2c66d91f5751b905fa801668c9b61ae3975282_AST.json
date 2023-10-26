@@ -1,0 +1,589 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.11"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "EthTermDeposits",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "deposits",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "depositEndTime",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "EthTermDeposits",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": []
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "Deposit",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "numberOfWeeks",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "address"
+                                        },
+                                        "name": "owner",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "msg"
+                                    },
+                                    "memberName": "sender"
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "amount",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "msg"
+                                    },
+                                    "memberName": "value"
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "_time",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "block"
+                                        },
+                                        "memberName": "timestamp"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "*",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "numberOfWeeks"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "1",
+                                            "subdenomination": "weeks"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "deposits"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "_time"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "depositEndTime"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "owner"
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "*",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "numberOfWeeks"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "1",
+                                                            "subdenomination": "weeks"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "depositEndTime"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_time"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "deposits"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "amount"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "Withdraw",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "address"
+                                        },
+                                        "name": "owner",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "msg"
+                                    },
+                                    "memberName": "sender"
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "&&",
+                                    "left": {
+                                        "type": "BinaryOperation",
+                                        "operator": "&&",
+                                        "left": {
+                                            "type": "BinaryOperation",
+                                            "operator": ">",
+                                            "left": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "depositEndTime"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "owner"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            }
+                                        },
+                                        "right": {
+                                            "type": "BinaryOperation",
+                                            "operator": ">",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "block"
+                                                },
+                                                "memberName": "timestamp"
+                                            },
+                                            "right": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "depositEndTime"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "owner"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": ">",
+                                        "left": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "deposits"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "0",
+                                            "subdenomination": null
+                                        }
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "amount",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "deposits"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "owner"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "deposits"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "owner"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    },
+                                                    "memberName": "transfer"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "amount"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "BooleanLiteral",
+                                            "value": true
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "BooleanLiteral",
+                                            "value": false
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "function(){revert();}",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "revert"
+                                    },
+                                    "arguments": [],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

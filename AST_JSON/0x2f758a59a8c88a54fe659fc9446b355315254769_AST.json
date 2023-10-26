@@ -1,0 +1,1880 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.19"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "DAO",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "UsingForDeclaration",
+                    "typeName": {
+                        "type": "ElementaryTypeName",
+                        "name": "uint256"
+                    },
+                    "libraryName": "SafeMath"
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "UserDefinedTypeName",
+                                "namePath": "ERC20"
+                            },
+                            "name": "typeToken",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "owner",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "burnAddress",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "0x0000000000000000000000000000000000000000",
+                                "subdenomination": null
+                            },
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "0x0000000000000000000000000000000000000000",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "tokenDecimals",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "unburnedTypeTokens",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "weiPerWholeToken",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "0.1",
+                                "subdenomination": "ether"
+                            },
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "0.1",
+                        "subdenomination": "ether"
+                    }
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "LogLiquidation",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_to",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_typeTokenAmount",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_ethAmount",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_newTotalSupply",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyOwner",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "DAO",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_typeToken",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_tokenDecimals",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "typeToken"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "ERC20"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "_typeToken"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "tokenDecimals"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_tokenDecimals"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "unburnedTypeTokens"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "typeToken"
+                                            },
+                                            "memberName": "totalSupply"
+                                        },
+                                        "arguments": [],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "exchangeTokens",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_amount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "typeToken"
+                                                },
+                                                "memberName": "transferFrom"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                },
+                                                {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "address"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "Identifier",
+                                                            "name": "this"
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "_amount"
+                                                }
+                                            ],
+                                            "names": []
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint256"
+                                        },
+                                        "name": "percentageOfPotToSend",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_percent"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "_amount"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "unburnedTypeTokens"
+                                        },
+                                        {
+                                            "type": "NumberLiteral",
+                                            "number": "8",
+                                            "subdenomination": null
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint256"
+                                        },
+                                        "name": "ethToSend",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "FunctionCall",
+                                                                "expression": {
+                                                                    "type": "ElementaryTypeName",
+                                                                    "name": "address"
+                                                                },
+                                                                "arguments": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "name": "this"
+                                                                    }
+                                                                ],
+                                                                "names": []
+                                                            },
+                                                            "memberName": "balance"
+                                                        },
+                                                        "memberName": "div"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "NumberLiteral",
+                                                            "number": "100000000",
+                                                            "subdenomination": null
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                }
+                                            ],
+                                            "isArray": false
+                                        },
+                                        "memberName": "mul"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "percentageOfPotToSend"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        },
+                                        "memberName": "transfer"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "ethToSend"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_byrne"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "_amount"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "LogLiquidation"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "_amount"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "ethToSend"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "unburnedTypeTokens"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "_byrne",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_amount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "typeToken"
+                                                },
+                                                "memberName": "transfer"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "burnAddress"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "_amount"
+                                                }
+                                            ],
+                                            "names": []
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "unburnedTypeTokens"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "unburnedTypeTokens"
+                                            },
+                                            "memberName": "sub"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "_amount"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "updateWeiPerWholeToken",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_newRate",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "weiPerWholeToken"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_newRate"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "changeOwner",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_newOwner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_newOwner"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "_percent",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "numerator",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "denominator",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "precision",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "quotient",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint256"
+                                        },
+                                        "name": "_numerator",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "numerator"
+                                        },
+                                        "memberName": "mul"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "**",
+                                                    "left": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "10",
+                                                        "subdenomination": null
+                                                    },
+                                                    "right": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "precision"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    }
+                                                }
+                                            ],
+                                            "isArray": false
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint256"
+                                        },
+                                        "name": "_quotient",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BinaryOperation",
+                                    "operator": "/",
+                                    "left": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "BinaryOperation",
+                                                "operator": "+",
+                                                "left": {
+                                                    "type": "TupleExpression",
+                                                    "components": [
+                                                        {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "/",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "_numerator"
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "denominator"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "isArray": false
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "5",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        ],
+                                        "isArray": false
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "10",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "TupleExpression",
+                                "components": [
+                                    {
+                                        "type": "Identifier",
+                                        "name": "_quotient"
+                                    }
+                                ],
+                                "isArray": false
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "function()publicpayable{}",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": []
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "ERC20",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "FunctionDefinition",
+                    "name": "totalSupply",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "supply",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": [],
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "balanceOf",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_owner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "balance",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": [],
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "transfer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_to",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_value",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": "success",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": [],
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "transferFrom",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_from",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_to",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_value",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": "success",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": [],
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "approve",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_spender",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "_value",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": "success",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": [],
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "allowance",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_owner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_spender",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "remaining",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": [],
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Transfer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "from",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "to",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "value",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Approval",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "owner",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "spender",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "value",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "SafeMath",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "FunctionDefinition",
+                    "name": "mul",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "a",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "b",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "c",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "a"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "NumberLiteral",
+                                            "number": "0",
+                                            "subdenomination": null
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "c"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "*",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "b"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "assert"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "/",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "c"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "a"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "b"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "Identifier",
+                                "name": "c"
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "pure"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "div",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "a",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "b",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "BinaryOperation",
+                                "operator": "/",
+                                "left": {
+                                    "type": "Identifier",
+                                    "name": "a"
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "b"
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "pure"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "sub",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "a",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "b",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "assert"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "<=",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "b"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "BinaryOperation",
+                                "operator": "-",
+                                "left": {
+                                    "type": "Identifier",
+                                    "name": "a"
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "b"
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "pure"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "add",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "a",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "b",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "c",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "c"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "a"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "b"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "assert"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": ">=",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "c"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "a"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "Identifier",
+                                "name": "c"
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "pure"
+                }
+            ],
+            "kind": "library"
+        }
+    ]
+}

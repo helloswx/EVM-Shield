@@ -1,0 +1,1668 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.24"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "ErrorThrower",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "EventDefinition",
+                    "name": "Error",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "func",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "message",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                }
+            ],
+            "kind": "interface"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "Ownable",
+            "baseContracts": [
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "ErrorThrower"
+                    },
+                    "arguments": null
+                }
+            ],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "owner",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "OwnershipRenounced",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "previousOwner",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "OwnershipTransferred",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "previousOwner",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "newOwner",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "constructor",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": true,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyOwner",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "_funcName",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "!=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "Error"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "_funcName"
+                                                    },
+                                                    {
+                                                        "type": "stringLiteral",
+                                                        "value": "Operation can only be performed by contract owner"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        null
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "renounceOwnership",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "OwnershipRenounced"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "address"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": [
+                                {
+                                    "type": "stringLiteral",
+                                    "value": "renounceOwnership"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "transferOwnership",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_newOwner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_transferOwnership"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "_newOwner"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": [
+                                {
+                                    "type": "stringLiteral",
+                                    "value": "transferOwnership"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "_transferOwnership",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_newOwner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "_newOwner"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "address"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "Error"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "stringLiteral",
+                                                        "value": "transferOwnership"
+                                                    },
+                                                    {
+                                                        "type": "stringLiteral",
+                                                        "value": "New owner's address needs to be different than 0x0"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        null
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "OwnershipTransferred"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "_newOwner"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_newOwner"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "AddressProxy",
+            "baseContracts": [
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "Ownable"
+                    },
+                    "arguments": null
+                }
+            ],
+            "subNodes": [
+                {
+                    "type": "StructDefinition",
+                    "name": "ContractAddress",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bytes32"
+                            },
+                            "name": "id",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "string"
+                            },
+                            "name": "name",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "at",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "createdTime",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "updatedTime",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "valueType": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "ContractAddress"
+                                }
+                            },
+                            "name": "contractsAddress",
+                            "expression": null,
+                            "visibility": "private",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "length": null
+                            },
+                            "name": "availableIds",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "AddressCreated",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "id",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "name",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "at",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "createdTime",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "updatedTime",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "AddressUpdated",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "id",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "name",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "at",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "createdTime",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "updatedTime",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "AddressProxy",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": []
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getAvailableIds",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "IdList",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "availableIds"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addAddress",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "name",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "newAddress",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "bytes32"
+                                        },
+                                        "name": "contAddId",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "stringToBytes32"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "name"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "nowInMilliseconds",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BinaryOperation",
+                                    "operator": "*",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "now"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "1000",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "contractsAddress"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "contAddId"
+                                            }
+                                        },
+                                        "memberName": "id"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0x0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "UserDefinedTypeName",
+                                                        "namePath": "ContractAddress"
+                                                    },
+                                                    "name": "newContractAddress",
+                                                    "storageLocation": "memory"
+                                                }
+                                            ],
+                                            "initialValue": null
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "newContractAddress"
+                                                    },
+                                                    "memberName": "id"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "contAddId"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "newContractAddress"
+                                                    },
+                                                    "memberName": "name"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "name"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "newContractAddress"
+                                                    },
+                                                    "memberName": "at"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "newAddress"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "newContractAddress"
+                                                    },
+                                                    "memberName": "createdTime"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "nowInMilliseconds"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "newContractAddress"
+                                                    },
+                                                    "memberName": "updatedTime"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "nowInMilliseconds"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "availableIds"
+                                                    },
+                                                    "memberName": "push"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "contAddId"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "contractsAddress"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "contAddId"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "newContractAddress"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "AddressCreated"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "newContractAddress"
+                                                        },
+                                                        "memberName": "id"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "newContractAddress"
+                                                        },
+                                                        "memberName": "name"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "newContractAddress"
+                                                        },
+                                                        "memberName": "at"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "newContractAddress"
+                                                        },
+                                                        "memberName": "createdTime"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "newContractAddress"
+                                                        },
+                                                        "memberName": "updatedTime"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "UserDefinedTypeName",
+                                                        "namePath": "ContractAddress"
+                                                    },
+                                                    "name": "contAdd",
+                                                    "storageLocation": "storage"
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "contractsAddress"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "contAddId"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "contAdd"
+                                                    },
+                                                    "memberName": "at"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "newAddress"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "contAdd"
+                                                    },
+                                                    "memberName": "updatedTime"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "nowInMilliseconds"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "AddressUpdated"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "contAdd"
+                                                        },
+                                                        "memberName": "id"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "contAdd"
+                                                        },
+                                                        "memberName": "name"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "contAdd"
+                                                        },
+                                                        "memberName": "at"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "contAdd"
+                                                        },
+                                                        "memberName": "createdTime"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "contAdd"
+                                                        },
+                                                        "memberName": "updatedTime"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": [
+                                {
+                                    "type": "stringLiteral",
+                                    "value": "addAddress"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getContractNameById",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "id",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "name",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "contractsAddress"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "id"
+                                    }
+                                },
+                                "memberName": "name"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getContractAddressById",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "id",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "contractAddr",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "contractsAddress"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "id"
+                                    }
+                                },
+                                "memberName": "at"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getContractCreatedTimeById",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "id",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "time",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "contractsAddress"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "id"
+                                    }
+                                },
+                                "memberName": "createdTime"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getContractUpdatedTimeById",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "id",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "time",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "contractsAddress"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "id"
+                                    }
+                                },
+                                "memberName": "updatedTime"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "stringToBytes32",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "source",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "result",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "bytes"
+                                        },
+                                        "name": "tempEmptyStringTest",
+                                        "storageLocation": "memory"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "source"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "tempEmptyStringTest"
+                                        },
+                                        "memberName": "length"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "NumberLiteral",
+                                            "number": "0x0",
+                                            "subdenomination": null
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "InLineAssemblyStatement",
+                                "language": null,
+                                "body": {
+                                    "type": "AssemblyBlock",
+                                    "operations": [
+                                        {
+                                            "type": "AssemblyAssignment",
+                                            "names": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "result"
+                                                }
+                                            ],
+                                            "expression": {
+                                                "type": "AssemblyExpression",
+                                                "functionName": "mload",
+                                                "arguments": [
+                                                    {
+                                                        "type": "AssemblyExpression",
+                                                        "functionName": "add",
+                                                        "arguments": [
+                                                            {
+                                                                "type": "AssemblyExpression",
+                                                                "functionName": "source",
+                                                                "arguments": []
+                                                            },
+                                                            {
+                                                                "type": "DecimalNumber",
+                                                                "value": "32"
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "pure"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

@@ -1,0 +1,622 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.23"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "BatchTransfer",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "owner",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "totalTransfer",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "totalAddresses",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "totalTransactions",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Transfers",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "from",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "value",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "count",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "constructor",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": true,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "restricted",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_"
+                                    }
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "batchTransfer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "address"
+                                    },
+                                    "length": null
+                                },
+                                "name": "_addresses",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "value"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "_addresses"
+                                                    },
+                                                    "memberName": "length"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "totalTransfer"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "value"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "totalAddresses"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "_addresses"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "UnaryOperation",
+                                    "operator": "++",
+                                    "subExpression": {
+                                        "type": "Identifier",
+                                        "name": "totalTransactions"
+                                    },
+                                    "isPrefix": false
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint256"
+                                        },
+                                        "name": "value",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BinaryOperation",
+                                    "operator": "/",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "value"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "_addresses"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "_addresses"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "_addresses"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    },
+                                                    "memberName": "transfer"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "value"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "Transfers"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        },
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "value"
+                                        },
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "_addresses"
+                                            },
+                                            "memberName": "length"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "withdraw",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "address"
+                                        },
+                                        "name": "contractAddress",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "Identifier",
+                                    "name": "this"
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        },
+                                        "memberName": "transfer"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "contractAddress"
+                                            },
+                                            "memberName": "balance"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "restricted",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "function()payablepublic{msg.sender.transfer(msg.value);}",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        },
+                                        "memberName": "transfer"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "value"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

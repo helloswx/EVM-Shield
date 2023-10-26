@@ -1,0 +1,683 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.0"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "WyoMesh",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StructDefinition",
+                    "name": "Device",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "string"
+                            },
+                            "name": "name",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "permissioned",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "IPFS_Hash",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "string"
+                            },
+                            "name": "ipfs_hash",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "auditor_signed",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "auditor",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "Device"
+                                }
+                            },
+                            "name": "devices",
+                            "expression": null,
+                            "visibility": "private",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "IPFS_Hash"
+                                },
+                                "length": null
+                            },
+                            "name": "ipfs_hashes",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "hash_index",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "constructor",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "_maxHashes",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "auditor"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "ipfs_hashes"
+                                        },
+                                        "memberName": "length"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_maxHashes"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "devices"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        },
+                                        "memberName": "permissioned"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "hash_index"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": true,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addDevice",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "toDevice",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "!=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "auditor"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "BooleanLiteral",
+                                    "value": false
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "devices"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "toDevice"
+                                            }
+                                        },
+                                        "memberName": "permissioned"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "submitHash",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "newIPFS_Hash",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "||",
+                                    "left": {
+                                        "type": "UnaryOperation",
+                                        "operator": "!",
+                                        "subExpression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "devices"
+                                                },
+                                                "index": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                }
+                                            },
+                                            "memberName": "permissioned"
+                                        },
+                                        "isPrefix": true
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": ">=",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "hash_index"
+                                        },
+                                        "right": {
+                                            "type": "BinaryOperation",
+                                            "operator": "-",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "ipfs_hashes"
+                                                },
+                                                "memberName": "length"
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "1",
+                                                "subdenomination": null
+                                            }
+                                        }
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "BooleanLiteral",
+                                    "value": false
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "ipfs_hashes"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "hash_index"
+                                            }
+                                        },
+                                        "memberName": "ipfs_hash"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "newIPFS_Hash"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "UnaryOperation",
+                                    "operator": "++",
+                                    "subExpression": {
+                                        "type": "Identifier",
+                                        "name": "hash_index"
+                                    },
+                                    "isPrefix": false
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getHash",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "index_",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "ipfs_hashes"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "index_"
+                                    }
+                                },
+                                "memberName": "ipfs_hash"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "signAudit",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "index_",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "!=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "auditor"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "BooleanLiteral",
+                                    "value": false
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "ipfs_hashes"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "index_"
+                                            }
+                                        },
+                                        "memberName": "auditor_signed"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": true
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

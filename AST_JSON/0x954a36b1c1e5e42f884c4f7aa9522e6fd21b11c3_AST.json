@@ -1,0 +1,816 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.10"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "Vault",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "EventDefinition",
+                    "name": "Deposit",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "depositor",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "amount",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Withdrawal",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "to",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "amount",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "Owner",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "deposits",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "Date",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "MinimumDeposit",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "Locked",
+                            "expression": {
+                                "type": "BooleanLiteral",
+                                "value": false
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BooleanLiteral",
+                        "value": false
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "initVault",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "minDeposit",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "Owner"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "Date"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "MinimumDeposit"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "minDeposit"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "deposit"
+                                    },
+                                    "arguments": [],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "isOpen",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "function()payable{deposit();}",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "deposit"
+                                    },
+                                    "arguments": [],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "SetLockDate",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "NewDate",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "Date"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "NewDate"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "WithdrawalEnabled",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "BinaryOperation",
+                                "operator": "&&",
+                                "left": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "Date"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "right": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "Date"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "now"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "deposit",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "value"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "MinimumDeposit"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<",
+                                                "left": {
+                                                    "type": "TupleExpression",
+                                                    "components": [
+                                                        {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "+",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "deposits"
+                                                                },
+                                                                "index": {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "Identifier",
+                                                                        "name": "msg"
+                                                                    },
+                                                                    "memberName": "sender"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "msg"
+                                                                },
+                                                                "memberName": "value"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "isArray": false
+                                                },
+                                                "right": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "deposits"
+                                                    },
+                                                    "index": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    }
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    null
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "+=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "deposits"
+                                                    },
+                                                    "index": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "value"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "Deposit"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        },
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "value"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "withdraw",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "to",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "amount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "WithdrawalEnabled"
+                                    },
+                                    "arguments": [],
+                                    "names": []
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "amount"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "this"
+                                                    },
+                                                    "memberName": "balance"
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "FunctionCall",
+                                                            "expression": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "to"
+                                                                },
+                                                                "memberName": "transfer"
+                                                            },
+                                                            "arguments": [
+                                                                {
+                                                                    "type": "Identifier",
+                                                                    "name": "amount"
+                                                                }
+                                                            ],
+                                                            "names": []
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyOwner",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "Owner"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_"
+                                    }
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "isOpen",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "UnaryOperation",
+                                    "operator": "!",
+                                    "subExpression": {
+                                        "type": "Identifier",
+                                        "name": "Locked"
+                                    },
+                                    "isPrefix": true
+                                },
+                                "TrueBody": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_"
+                                    }
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "lock",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "Locked"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

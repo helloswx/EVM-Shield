@@ -1,0 +1,3438 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.11"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "RatingStore",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StructDefinition",
+                    "name": "Score",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "exists",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "int"
+                            },
+                            "name": "cumulativeScore",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "totalRatings",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "debug",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "Score"
+                                }
+                            },
+                            "name": "scores",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "manager",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "controller",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Debug",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "message",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "restricted",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "||",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "||",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "==",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "manager"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "==",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "tx"
+                                                        },
+                                                        "memberName": "origin"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "manager"
+                                                    }
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "controller"
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyBy",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "by",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "by"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "RatingStore",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_manager",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_controller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "manager"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_manager"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "controller"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_controller"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "debug"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": false
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "set",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "target",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "cumulative",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "total",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "UnaryOperation",
+                                    "operator": "!",
+                                    "subExpression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "exists"
+                                    },
+                                    "isPrefix": true
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "scores"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "target"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "Score"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "BooleanLiteral",
+                                                            "value": true
+                                                        },
+                                                        {
+                                                            "type": "NumberLiteral",
+                                                            "number": "0",
+                                                            "subdenomination": null
+                                                        },
+                                                        {
+                                                            "type": "NumberLiteral",
+                                                            "number": "0",
+                                                            "subdenomination": null
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "cumulativeScore"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "cumulative"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "totalRatings"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "total"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "restricted",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "add",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "target",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "wScore",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "UnaryOperation",
+                                    "operator": "!",
+                                    "subExpression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "exists"
+                                    },
+                                    "isPrefix": true
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "scores"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "target"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "Score"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "BooleanLiteral",
+                                                            "value": true
+                                                        },
+                                                        {
+                                                            "type": "NumberLiteral",
+                                                            "number": "0",
+                                                            "subdenomination": null
+                                                        },
+                                                        {
+                                                            "type": "NumberLiteral",
+                                                            "number": "0",
+                                                            "subdenomination": null
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "cumulativeScore"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "wScore"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "totalRatings"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "1",
+                                        "subdenomination": null
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "restricted",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "get",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "target",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "scores"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "target"
+                                            }
+                                        },
+                                        "memberName": "exists"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "scores"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "target"
+                                                        }
+                                                    },
+                                                    "memberName": "cumulativeScore"
+                                                },
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "scores"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "target"
+                                                        }
+                                                    },
+                                                    "memberName": "totalRatings"
+                                                }
+                                            ],
+                                            "isArray": false
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                },
+                                                {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            ],
+                                            "isArray": false
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "reset",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "target",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "scores"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "target"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "Score"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "BooleanLiteral",
+                                                "value": true
+                                            },
+                                            {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            },
+                                            {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getManager",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "manager"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setManager",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "newManager",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "manager"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "newManager"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getController",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "controller"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setController",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "newController",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "controller"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "newController"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getDebug",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "debug"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setDebug",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": "_debug",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "debug"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_debug"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "Etherep",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bool"
+                            },
+                            "name": "debug",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "manager",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "fee",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "storageAddress",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "waitTime",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "lastRating",
+                            "expression": null,
+                            "visibility": "internal",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Error",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "sender",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "message",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Debug",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "string"
+                                },
+                                "name": "message",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "DebugInt",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "message",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "DebugUint",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "message",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Rating",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "by",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "who",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "rating",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "FeeChanged",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "f",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "DelayChanged",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "d",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyBy",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "by",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "by"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "delay",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "&&",
+                                    "left": {
+                                        "type": "BinaryOperation",
+                                        "operator": "==",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "debug"
+                                        },
+                                        "right": {
+                                            "type": "BooleanLiteral",
+                                            "value": false
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": ">",
+                                        "left": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "lastRating"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        },
+                                        "right": {
+                                            "type": "BinaryOperation",
+                                            "operator": "-",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "now"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "waitTime"
+                                            }
+                                        }
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "Error"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    },
+                                                    {
+                                                        "type": "stringLiteral",
+                                                        "value": "Rating too often"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "revert"
+                                                },
+                                                "arguments": [],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "requireFee",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": ">=",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "value"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "fee"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "Etherep",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_manager",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "_fee",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_storageAddress",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "_wait",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "manager"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_manager"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "fee"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_fee"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "storageAddress"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_storageAddress"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "waitTime"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_wait"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "debug"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": false
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setDebug",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": "d",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "debug"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "d"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getDebug",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "debug"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setFee",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "newFee",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "fee"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "newFee"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "FeeChanged"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "fee"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getFee",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "fee"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setDelay",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "_delay",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "waitTime"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "_delay"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "DelayChanged"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "waitTime"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getDelay",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "waitTime"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "setManager",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "who",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "manager"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "who"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getManager",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "Identifier",
+                                "name": "manager"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "drain",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": ">",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "this"
+                                                },
+                                                "memberName": "balance"
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "manager"
+                                        },
+                                        "memberName": "transfer"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "this"
+                                            },
+                                            "memberName": "balance"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyBy",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "manager"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "rate",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "who",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "rating",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "rating"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "5",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "rating"
+                                                },
+                                                "right": {
+                                                    "type": "UnaryOperation",
+                                                    "operator": "-",
+                                                    "subExpression": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "5",
+                                                        "subdenomination": null
+                                                    },
+                                                    "isPrefix": true
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "!=",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "who"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "RatingStore"
+                                        },
+                                        "name": "store",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "RatingStore"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "storageAddress"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "weight",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "NumberLiteral",
+                                    "number": "0",
+                                    "subdenomination": null
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "multiplier",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "NumberLiteral",
+                                    "number": "100",
+                                    "subdenomination": null
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "absRating",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "Identifier",
+                                    "name": "rating"
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "absRating"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "absRating"
+                                                },
+                                                "right": {
+                                                    "type": "UnaryOperation",
+                                                    "operator": "-",
+                                                    "subExpression": {
+                                                        "type": "Identifier",
+                                                        "name": "rating"
+                                                    },
+                                                    "isPrefix": true
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "senderScore",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "senderRatings",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "senderCumulative",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "NumberLiteral",
+                                    "number": "0",
+                                    "subdenomination": null
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "senderScore"
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "name": "senderRatings"
+                                            }
+                                        ],
+                                        "isArray": false
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "store"
+                                            },
+                                            "memberName": "get"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "!=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "senderScore"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "senderCumulative"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "*",
+                                                    "left": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "/",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "senderScore"
+                                                                },
+                                                                "right": {
+                                                                    "type": "TupleExpression",
+                                                                    "components": [
+                                                                        {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "*",
+                                                                            "left": {
+                                                                                "type": "FunctionCall",
+                                                                                "expression": {
+                                                                                    "type": "ElementaryTypeName",
+                                                                                    "name": "int"
+                                                                                },
+                                                                                "arguments": [
+                                                                                    {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "senderRatings"
+                                                                                    }
+                                                                                ],
+                                                                                "names": []
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "NumberLiteral",
+                                                                                "number": "100",
+                                                                                "subdenomination": null
+                                                                            }
+                                                                        }
+                                                                    ],
+                                                                    "isArray": false
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "100",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "senderCumulative"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "weight"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "/",
+                                                                "left": {
+                                                                    "type": "TupleExpression",
+                                                                    "components": [
+                                                                        {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "*",
+                                                                            "left": {
+                                                                                "type": "TupleExpression",
+                                                                                "components": [
+                                                                                    {
+                                                                                        "type": "BinaryOperation",
+                                                                                        "operator": "/",
+                                                                                        "left": {
+                                                                                            "type": "Identifier",
+                                                                                            "name": "senderCumulative"
+                                                                                        },
+                                                                                        "right": {
+                                                                                            "type": "NumberLiteral",
+                                                                                            "number": "5",
+                                                                                            "subdenomination": null
+                                                                                        }
+                                                                                    }
+                                                                                ],
+                                                                                "isArray": false
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "Identifier",
+                                                                                "name": "absRating"
+                                                                            }
+                                                                        }
+                                                                    ],
+                                                                    "isArray": false
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "10",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "multiplier"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "weight"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "multiplier"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "workRating",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "BinaryOperation",
+                                    "operator": "*",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "rating"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "weight"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "lastRating"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "now"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "Rating"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "who"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "workRating"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "store"
+                                        },
+                                        "memberName": "add"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "who"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "workRating"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "delay",
+                            "arguments": []
+                        },
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "requireFee",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getScore",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "who",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "score",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "RatingStore"
+                                        },
+                                        "name": "store",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "RatingStore"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "storageAddress"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "cumulative",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "ratings",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "cumulative"
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "name": "ratings"
+                                            }
+                                        ],
+                                        "isArray": false
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "store"
+                                            },
+                                            "memberName": "get"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "who"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "score"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "/",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "cumulative"
+                                        },
+                                        "right": {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "int"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "ratings"
+                                                }
+                                            ],
+                                            "names": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getScoreAndCount",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "who",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "int"
+                                },
+                                "name": "score",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "ratings",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "UserDefinedTypeName",
+                                            "namePath": "RatingStore"
+                                        },
+                                        "name": "store",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "RatingStore"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "storageAddress"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "int"
+                                        },
+                                        "name": "cumulative",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "cumulative"
+                                            },
+                                            {
+                                                "type": "Identifier",
+                                                "name": "ratings"
+                                            }
+                                        ],
+                                        "isArray": false
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "store"
+                                            },
+                                            "memberName": "get"
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "who"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "score"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "/",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "cumulative"
+                                        },
+                                        "right": {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "int"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "ratings"
+                                                }
+                                            ],
+                                            "names": []
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

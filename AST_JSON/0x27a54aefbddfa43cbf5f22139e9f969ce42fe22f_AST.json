@@ -1,0 +1,1998 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.21"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "gladiate",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "EnumDefinition",
+                    "name": "Weapon",
+                    "members": [
+                        {
+                            "type": "EnumValue",
+                            "name": "None"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Knife"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Sword"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Spear"
+                        }
+                    ]
+                },
+                {
+                    "type": "EnumDefinition",
+                    "name": "GladiatorState",
+                    "members": [
+                        {
+                            "type": "EnumValue",
+                            "name": "Null"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Incoming"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Active"
+                        },
+                        {
+                            "type": "EnumValue",
+                            "name": "Outgoing"
+                        }
+                    ]
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "Gladiator",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "UserDefinedTypeName",
+                                "namePath": "GladiatorState"
+                            },
+                            "name": "state",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "stateTransitionBlock",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint8"
+                            },
+                            "name": "x",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint8"
+                            },
+                            "name": "y",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "UserDefinedTypeName",
+                                "namePath": "Weapon"
+                            },
+                            "name": "weapon",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint8"
+                            },
+                            "name": "coins",
+                            "storageLocation": null
+                        }
+                    ]
+                }
+            ],
+            "kind": "library"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "Arena",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint8"
+                            },
+                            "name": "pseudoRandomNonce",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "pseudoRandomUint8",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "limit",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "BinaryOperation",
+                                "operator": "%",
+                                "left": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint8"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "keccak256"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "block"
+                                                        },
+                                                        "memberName": "blockhash"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "-",
+                                                            "left": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "block"
+                                                                },
+                                                                "memberName": "number"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "1",
+                                                                "subdenomination": null
+                                                            }
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "pseudoRandomNonce"
+                                                }
+                                            ],
+                                            "names": []
+                                        }
+                                    ],
+                                    "names": []
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "limit"
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "UnaryOperation",
+                                    "operator": "++",
+                                    "subExpression": {
+                                        "type": "Identifier",
+                                        "name": "pseudoRandomNonce"
+                                    },
+                                    "isPrefix": false
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "coinValue",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "50000000000000000",
+                                "subdenomination": null
+                            },
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "50000000000000000",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "spawnTime",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "3",
+                                "subdenomination": null
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "3",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "despawnTime",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "2",
+                                "subdenomination": null
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "2",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "emperor",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "gladiate.Gladiator"
+                                }
+                            },
+                            "name": "gladiators",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "Tile",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "coins",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "UserDefinedTypeName",
+                                "namePath": "gladiate.Weapon"
+                            },
+                            "name": "weapon",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "gladiator",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "UserDefinedTypeName",
+                                        "namePath": "Tile"
+                                    },
+                                    "length": {
+                                        "type": "NumberLiteral",
+                                        "number": "10",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "length": {
+                                    "type": "NumberLiteral",
+                                    "number": "10",
+                                    "subdenomination": null
+                                }
+                            },
+                            "name": "tiles",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "Arena",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "emperor"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyEmporer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "emperor"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "gladiatorExists",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "owner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "!=",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiators"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "owner"
+                                                    }
+                                                },
+                                                "memberName": "state"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiate"
+                                                    },
+                                                    "memberName": "GladiatorState"
+                                                },
+                                                "memberName": "Null"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "gladiatorInState",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "owner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "gladiate.GladiatorState"
+                                },
+                                "name": "s",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiators"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "owner"
+                                                    }
+                                                },
+                                                "memberName": "state"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "s"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "startGladiatorWithCoin",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "x",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "y",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "owner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "memberName": "state"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "gladiate"
+                                            },
+                                            "memberName": "GladiatorState"
+                                        },
+                                        "memberName": "Incoming"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "memberName": "stateTransitionBlock"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "block"
+                                            },
+                                            "memberName": "number"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "spawnTime"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "memberName": "x"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "x"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "memberName": "y"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "y"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "memberName": "coins"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "1",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "tiles"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "x"
+                                                }
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "y"
+                                            }
+                                        },
+                                        "memberName": "gladiator"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "despawnGladiatorAndAwardCoins",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "owner",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        },
+                                        "memberName": "transfer"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "*",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiators"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "owner"
+                                                    }
+                                                },
+                                                "memberName": "coins"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "coinValue"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        "memberName": "state"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "gladiate"
+                                            },
+                                            "memberName": "GladiatorState"
+                                        },
+                                        "memberName": "Null"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addCoins",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "x",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint8"
+                                },
+                                "name": "y",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "amount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "tiles"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "x"
+                                                }
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "y"
+                                            }
+                                        },
+                                        "memberName": "coins"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "amount"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "throwIn",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                },
+                                "name": null,
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiators"
+                                                    },
+                                                    "index": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    }
+                                                },
+                                                "memberName": "state"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiate"
+                                                    },
+                                                    "memberName": "GladiatorState"
+                                                },
+                                                "memberName": "Null"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "value"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "coinValue"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint8"
+                                        },
+                                        "name": "lastX",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint8"
+                                        },
+                                        "name": "lastY",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint8"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "3",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint8"
+                                                    },
+                                                    "name": "x",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "pseudoRandomUint8"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "NumberLiteral",
+                                                        "number": "10",
+                                                        "subdenomination": null
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint8"
+                                                    },
+                                                    "name": "y",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "pseudoRandomUint8"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "NumberLiteral",
+                                                        "number": "10",
+                                                        "subdenomination": null
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "lastX"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "x"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "lastY"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "y"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "tiles"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "x"
+                                                            }
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "y"
+                                                        }
+                                                    },
+                                                    "memberName": "gladiator"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0x0",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "FunctionCall",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "startGladiatorWithCoin"
+                                                            },
+                                                            "arguments": [
+                                                                {
+                                                                    "type": "Identifier",
+                                                                    "name": "x"
+                                                                },
+                                                                {
+                                                                    "type": "Identifier",
+                                                                    "name": "y"
+                                                                },
+                                                                {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "Identifier",
+                                                                        "name": "msg"
+                                                                    },
+                                                                    "memberName": "sender"
+                                                                }
+                                                            ],
+                                                            "names": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "BooleanLiteral",
+                                                        "value": true
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "addCoins"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "lastX"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "lastY"
+                                        },
+                                        {
+                                            "type": "NumberLiteral",
+                                            "number": "1",
+                                            "subdenomination": null
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "BooleanLiteral",
+                                "value": false
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "activateGladiator",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "who",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "<=",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiators"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "who"
+                                                    }
+                                                },
+                                                "memberName": "stateTransitionBlock"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "block"
+                                                },
+                                                "memberName": "number"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "who"
+                                            }
+                                        },
+                                        "memberName": "state"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "gladiate"
+                                            },
+                                            "memberName": "GladiatorState"
+                                        },
+                                        "memberName": "Active"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "who"
+                                            }
+                                        },
+                                        "memberName": "stateTransitionBlock"
+                                    },
+                                    "right": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "BinaryOperation",
+                                                "operator": "-",
+                                                "left": {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "NumberLiteral",
+                                                            "number": "0",
+                                                            "subdenomination": null
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "1",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        ],
+                                        "isArray": false
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "gladiatorExists",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "who"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "gladiatorInState",
+                            "arguments": [
+                                {
+                                    "type": "Identifier",
+                                    "name": "who"
+                                },
+                                {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "gladiate"
+                                        },
+                                        "memberName": "GladiatorState"
+                                    },
+                                    "memberName": "Incoming"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "imOut",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        },
+                                        "memberName": "state"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "gladiate"
+                                            },
+                                            "memberName": "GladiatorState"
+                                        },
+                                        "memberName": "Outgoing"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        },
+                                        "memberName": "stateTransitionBlock"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "block"
+                                            },
+                                            "memberName": "number"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "despawnTime"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "gladiatorInState",
+                            "arguments": [
+                                {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "msg"
+                                    },
+                                    "memberName": "sender"
+                                },
+                                {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "gladiate"
+                                        },
+                                        "memberName": "GladiatorState"
+                                    },
+                                    "memberName": "Active"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getOut",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "<=",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "gladiators"
+                                                    },
+                                                    "index": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    }
+                                                },
+                                                "memberName": "stateTransitionBlock"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "block"
+                                                },
+                                                "memberName": "number"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "despawnGladiatorAndAwardCoins"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "gladiatorInState",
+                            "arguments": [
+                                {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "msg"
+                                    },
+                                    "memberName": "sender"
+                                },
+                                {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "gladiate"
+                                        },
+                                        "memberName": "GladiatorState"
+                                    },
+                                    "memberName": "Outgoing"
+                                }
+                            ]
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "nextBlock",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "UnaryOperation",
+                                    "operator": "++",
+                                    "subExpression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "gladiators"
+                                            },
+                                            "index": {
+                                                "type": "NumberLiteral",
+                                                "number": "0x0",
+                                                "subdenomination": null
+                                            }
+                                        },
+                                        "memberName": "coins"
+                                    },
+                                    "isPrefix": false
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

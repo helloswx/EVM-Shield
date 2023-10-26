@@ -1,0 +1,1088 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.25"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "EasyInvestForeverProtected2",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                }
+                            },
+                            "name": "invested",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                }
+                            },
+                            "name": "bonus",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "atTime",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "previousBalance",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "0",
+                                "subdenomination": null
+                            },
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "0",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint256"
+                            },
+                            "name": "interestRate",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "1",
+                                "subdenomination": null
+                            },
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "1",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "nextTime",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "+",
+                                "left": {
+                                    "type": "Identifier",
+                                    "name": "now"
+                                },
+                                "right": {
+                                    "type": "NumberLiteral",
+                                    "number": "2",
+                                    "subdenomination": "days"
+                                }
+                            },
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "+",
+                        "left": {
+                            "type": "Identifier",
+                            "name": "now"
+                        },
+                        "right": {
+                            "type": "NumberLiteral",
+                            "number": "2",
+                            "subdenomination": "days"
+                        }
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "function()externalpayable{uintvarNow=now;uintvarAtTime=atTime[msg.sender];if(varAtTime>varNow)varAtTime=varNow;atTime[msg.sender]=varNow;if(varNow>=nextTime){uint256currentBalance=address(this).balance;if(currentBalance<previousBalance)currentBalance=previousBalance;interestRate=(currentBalance-previousBalance)/10e18+1;interestRate=(interestRate>10)?10:((interestRate<1)?1:interestRate);previousBalance=currentBalance;nextTime=varNow+2days;}if(invested[msg.sender]!=0){uint256amount=invested[msg.sender]*interestRate/100*(varNow-varAtTime)/1days;amount=(amount>invested[msg.sender]/10)?invested[msg.sender]/10:amount;if(varNow-varAtTime<1days&&amount>10e15*5)amount=10e15*5;if(amount>address(this).balance/10)amount=address(this).balance/10;if(amount>0)msg.sender.transfer(amount);if(varNow-varAtTime>=1days&&msg.value>=10e17){invested[msg.sender]+=msg.value;bonus[msg.sender]+=msg.value;}}invested[msg.sender]+=msg.value;}",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "varNow",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "Identifier",
+                                    "name": "now"
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "varAtTime",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "atTime"
+                                    },
+                                    "index": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "varAtTime"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "varNow"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "BinaryOperation",
+                                        "operator": "=",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "varAtTime"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "varNow"
+                                        }
+                                    }
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "atTime"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "varNow"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "varNow"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "nextTime"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint256"
+                                                    },
+                                                    "name": "currentBalance",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "address"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "Identifier",
+                                                            "name": "this"
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                },
+                                                "memberName": "balance"
+                                            }
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "currentBalance"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "previousBalance"
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "currentBalance"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "previousBalance"
+                                                    }
+                                                }
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "interestRate"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "/",
+                                                        "left": {
+                                                            "type": "TupleExpression",
+                                                            "components": [
+                                                                {
+                                                                    "type": "BinaryOperation",
+                                                                    "operator": "-",
+                                                                    "left": {
+                                                                        "type": "Identifier",
+                                                                        "name": "currentBalance"
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "Identifier",
+                                                                        "name": "previousBalance"
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "isArray": false
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "10e18",
+                                                            "subdenomination": null
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "interestRate"
+                                                },
+                                                "right": {
+                                                    "type": "Conditional",
+                                                    "condition": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "BinaryOperation",
+                                                                "operator": ">",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "interestRate"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "10",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    },
+                                                    "TrueExpression": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "10",
+                                                        "subdenomination": null
+                                                    },
+                                                    "FalseExpression": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "Conditional",
+                                                                "condition": {
+                                                                    "type": "TupleExpression",
+                                                                    "components": [
+                                                                        {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "<",
+                                                                            "left": {
+                                                                                "type": "Identifier",
+                                                                                "name": "interestRate"
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "NumberLiteral",
+                                                                                "number": "1",
+                                                                                "subdenomination": null
+                                                                            }
+                                                                        }
+                                                                    ],
+                                                                    "isArray": false
+                                                                },
+                                                                "TrueExpression": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                },
+                                                                "FalseExpression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "interestRate"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "previousBalance"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "currentBalance"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "nextTime"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "varNow"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "2",
+                                                        "subdenomination": "days"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "!=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "invested"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint256"
+                                                    },
+                                                    "name": "amount",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "BinaryOperation",
+                                                "operator": "/",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "*",
+                                                    "left": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "/",
+                                                        "left": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "*",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "invested"
+                                                                },
+                                                                "index": {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "Identifier",
+                                                                        "name": "msg"
+                                                                    },
+                                                                    "memberName": "sender"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "interestRate"
+                                                            }
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "100",
+                                                            "subdenomination": null
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "-",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "varNow"
+                                                                },
+                                                                "right": {
+                                                                    "type": "Identifier",
+                                                                    "name": "varAtTime"
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "1",
+                                                    "subdenomination": "days"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "amount"
+                                                },
+                                                "right": {
+                                                    "type": "Conditional",
+                                                    "condition": {
+                                                        "type": "TupleExpression",
+                                                        "components": [
+                                                            {
+                                                                "type": "BinaryOperation",
+                                                                "operator": ">",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "amount"
+                                                                },
+                                                                "right": {
+                                                                    "type": "BinaryOperation",
+                                                                    "operator": "/",
+                                                                    "left": {
+                                                                        "type": "IndexAccess",
+                                                                        "base": {
+                                                                            "type": "Identifier",
+                                                                            "name": "invested"
+                                                                        },
+                                                                        "index": {
+                                                                            "type": "MemberAccess",
+                                                                            "expression": {
+                                                                                "type": "Identifier",
+                                                                                "name": "msg"
+                                                                            },
+                                                                            "memberName": "sender"
+                                                                        }
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "NumberLiteral",
+                                                                        "number": "10",
+                                                                        "subdenomination": null
+                                                                    }
+                                                                }
+                                                            }
+                                                        ],
+                                                        "isArray": false
+                                                    },
+                                                    "TrueExpression": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "/",
+                                                        "left": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "invested"
+                                                            },
+                                                            "index": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "msg"
+                                                                },
+                                                                "memberName": "sender"
+                                                            }
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "10",
+                                                            "subdenomination": null
+                                                        }
+                                                    },
+                                                    "FalseExpression": {
+                                                        "type": "Identifier",
+                                                        "name": "amount"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "&&",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "<",
+                                                    "left": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "-",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "varNow"
+                                                        },
+                                                        "right": {
+                                                            "type": "Identifier",
+                                                            "name": "varAtTime"
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": "days"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": ">",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "amount"
+                                                    },
+                                                    "right": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "*",
+                                                        "left": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "10e15",
+                                                            "subdenomination": null
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "5",
+                                                            "subdenomination": null
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "amount"
+                                                    },
+                                                    "right": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "*",
+                                                        "left": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "10e15",
+                                                            "subdenomination": null
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "5",
+                                                            "subdenomination": null
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "amount"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "/",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "FunctionCall",
+                                                            "expression": {
+                                                                "type": "ElementaryTypeName",
+                                                                "name": "address"
+                                                            },
+                                                            "arguments": [
+                                                                {
+                                                                    "type": "Identifier",
+                                                                    "name": "this"
+                                                                }
+                                                            ],
+                                                            "names": []
+                                                        },
+                                                        "memberName": "balance"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "10",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "amount"
+                                                    },
+                                                    "right": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "/",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "FunctionCall",
+                                                                "expression": {
+                                                                    "type": "ElementaryTypeName",
+                                                                    "name": "address"
+                                                                },
+                                                                "arguments": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "name": "this"
+                                                                    }
+                                                                ],
+                                                                "names": []
+                                                            },
+                                                            "memberName": "balance"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "10",
+                                                            "subdenomination": null
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "amount"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "FunctionCall",
+                                                    "expression": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "msg"
+                                                            },
+                                                            "memberName": "sender"
+                                                        },
+                                                        "memberName": "transfer"
+                                                    },
+                                                    "arguments": [
+                                                        {
+                                                            "type": "Identifier",
+                                                            "name": "amount"
+                                                        }
+                                                    ],
+                                                    "names": []
+                                                }
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "&&",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": ">=",
+                                                    "left": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "-",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "varNow"
+                                                        },
+                                                        "right": {
+                                                            "type": "Identifier",
+                                                            "name": "varAtTime"
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": "days"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": ">=",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "value"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "10e17",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "+=",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "invested"
+                                                                },
+                                                                "index": {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "Identifier",
+                                                                        "name": "msg"
+                                                                    },
+                                                                    "memberName": "sender"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "msg"
+                                                                },
+                                                                "memberName": "value"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "+=",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bonus"
+                                                                },
+                                                                "index": {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "Identifier",
+                                                                        "name": "msg"
+                                                                    },
+                                                                    "memberName": "sender"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "msg"
+                                                                },
+                                                                "memberName": "value"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "+=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "invested"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "value"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

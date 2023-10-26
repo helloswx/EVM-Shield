@@ -1,0 +1,3358 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.23"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "owned",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "FunctionDefinition",
+                    "name": "constructor",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": true,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "owner",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyOwner",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "consumerRegistry",
+            "baseContracts": [
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "owned"
+                    },
+                    "arguments": null
+                }
+            ],
+            "subNodes": [
+                {
+                    "type": "EventDefinition",
+                    "name": "consumerRegistered",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "consumer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "consumerDeregistered",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "consumer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                }
+                            },
+                            "name": "consumers",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyRegisteredConsumers",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": ">",
+                                            "left": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "consumers"
+                                                },
+                                                "index": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "0",
+                                                "subdenomination": null
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "registerConsumer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "aconsumer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "auserID",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "!=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "auserID"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "consumerRegistered"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "aconsumer"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "consumerDeregistered"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "aconsumer"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "consumers"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "aconsumer"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "auserID"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "producerRegistry",
+            "baseContracts": [
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "owned"
+                    },
+                    "arguments": null
+                }
+            ],
+            "subNodes": [
+                {
+                    "type": "EventDefinition",
+                    "name": "producerRegistered",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "producerDeregistered",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                }
+                            },
+                            "name": "producers",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyRegisteredProducers",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "producers"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "registerProducer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "aproducer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "producerRegistered"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "producers"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "deregisterProducer",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "aproducer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "producerDeregistered"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "producers"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": false
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "EnergyStore",
+            "baseContracts": [
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "owned"
+                    },
+                    "arguments": null
+                },
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "consumerRegistry"
+                    },
+                    "arguments": null
+                },
+                {
+                    "type": "InheritanceSpecifier",
+                    "baseName": {
+                        "type": "UserDefinedTypeName",
+                        "namePath": "producerRegistry"
+                    },
+                    "arguments": null
+                }
+            ],
+            "subNodes": [
+                {
+                    "type": "EventDefinition",
+                    "name": "BidMade",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "day",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "price",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "energy",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "BidRevoked",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "day",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "price",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "energy",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Deal",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "day",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "price",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "energy",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "userID",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "DealRevoked",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "day",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "price",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "energy",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "userID",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "mWh",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "1",
+                                "subdenomination": null
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "1",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "Wh",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "*",
+                                "left": {
+                                    "type": "NumberLiteral",
+                                    "number": "1000",
+                                    "subdenomination": null
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "mWh"
+                                }
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "*",
+                        "left": {
+                            "type": "NumberLiteral",
+                            "number": "1000",
+                            "subdenomination": null
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "mWh"
+                        }
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "kWh",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "*",
+                                "left": {
+                                    "type": "NumberLiteral",
+                                    "number": "1000",
+                                    "subdenomination": null
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "Wh"
+                                }
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "*",
+                        "left": {
+                            "type": "NumberLiteral",
+                            "number": "1000",
+                            "subdenomination": null
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "Wh"
+                        }
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "MWh",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "*",
+                                "left": {
+                                    "type": "NumberLiteral",
+                                    "number": "1000",
+                                    "subdenomination": null
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "kWh"
+                                }
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "*",
+                        "left": {
+                            "type": "NumberLiteral",
+                            "number": "1000",
+                            "subdenomination": null
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "kWh"
+                        }
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "GWh",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "*",
+                                "left": {
+                                    "type": "NumberLiteral",
+                                    "number": "1000",
+                                    "subdenomination": null
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "MWh"
+                                }
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "*",
+                        "left": {
+                            "type": "NumberLiteral",
+                            "number": "1000",
+                            "subdenomination": null
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "MWh"
+                        }
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "TWh",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "*",
+                                "left": {
+                                    "type": "NumberLiteral",
+                                    "number": "1000",
+                                    "subdenomination": null
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "GWh"
+                                }
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "*",
+                        "left": {
+                            "type": "NumberLiteral",
+                            "number": "1000",
+                            "subdenomination": null
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "GWh"
+                        }
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "maxEnergy",
+                            "expression": {
+                                "type": "BinaryOperation",
+                                "operator": "*",
+                                "left": {
+                                    "type": "NumberLiteral",
+                                    "number": "18446",
+                                    "subdenomination": null
+                                },
+                                "right": {
+                                    "type": "Identifier",
+                                    "name": "GWh"
+                                }
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "BinaryOperation",
+                        "operator": "*",
+                        "left": {
+                            "type": "NumberLiteral",
+                            "number": "18446",
+                            "subdenomination": null
+                        },
+                        "right": {
+                            "type": "Identifier",
+                            "name": "GWh"
+                        }
+                    }
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "Bid",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "producer",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint32"
+                            },
+                            "name": "day",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint32"
+                            },
+                            "name": "price",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "energy",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "timestamp",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "Ask",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "producer",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint32"
+                            },
+                            "name": "day",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint32"
+                            },
+                            "name": "price",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "energy",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint32"
+                            },
+                            "name": "userID",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint64"
+                            },
+                            "name": "timestamp",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "Bid"
+                                },
+                                "length": null
+                            },
+                            "name": "bids",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "Ask"
+                                },
+                                "length": null
+                            },
+                            "name": "asks",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "Mapping",
+                                    "keyType": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint32"
+                                    },
+                                    "valueType": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint"
+                                    }
+                                }
+                            },
+                            "name": "bidsIndex",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "asksIndex",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "offer_energy",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aday",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aprice",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "aenergy",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "atimestamp",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": ">=",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "aenergy"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "kWh"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "idx",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bidsIndex"
+                                        },
+                                        "index": {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "aday"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "&&",
+                                    "left": {
+                                        "type": "BinaryOperation",
+                                        "operator": "&&",
+                                        "left": {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "BinaryOperation",
+                                                    "operator": ">",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "bids"
+                                                        },
+                                                        "memberName": "length"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    }
+                                                }
+                                            ],
+                                            "isArray": false
+                                        },
+                                        "right": {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "==",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "idx"
+                                                            }
+                                                        },
+                                                        "memberName": "producer"
+                                                    },
+                                                    "right": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "msg"
+                                                        },
+                                                        "memberName": "sender"
+                                                    }
+                                                }
+                                            ],
+                                            "isArray": false
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "bids"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "idx"
+                                                        }
+                                                    },
+                                                    "memberName": "day"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "aday"
+                                                }
+                                            }
+                                        ],
+                                        "isArray": false
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "require"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "BinaryOperation",
+                                                        "operator": ">",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "atimestamp"
+                                                        },
+                                                        "right": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bids"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "idx"
+                                                                }
+                                                            },
+                                                            "memberName": "timestamp"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "BidRevoked"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "idx"
+                                                            }
+                                                        },
+                                                        "memberName": "producer"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "idx"
+                                                            }
+                                                        },
+                                                        "memberName": "day"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "idx"
+                                                            }
+                                                        },
+                                                        "memberName": "price"
+                                                    },
+                                                    {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "idx"
+                                                            }
+                                                        },
+                                                        "memberName": "energy"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "idx"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bids"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "bidsIndex"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "aday"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "idx"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "bids"
+                                        },
+                                        "memberName": "push"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "Bid"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "aday"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "aprice"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "aenergy"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "atimestamp"
+                                                }
+                                            ],
+                                            "names": [
+                                                "producer",
+                                                "day",
+                                                "price",
+                                                "energy",
+                                                "timestamp"
+                                            ]
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "EmitStatement",
+                                "eventCall": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "BidMade"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "bids"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "idx"
+                                                }
+                                            },
+                                            "memberName": "producer"
+                                        },
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "bids"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "idx"
+                                                }
+                                            },
+                                            "memberName": "day"
+                                        },
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "bids"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "idx"
+                                                }
+                                            },
+                                            "memberName": "price"
+                                        },
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "bids"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "idx"
+                                                }
+                                            },
+                                            "memberName": "energy"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyRegisteredProducers",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getBidsCount",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "count",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "bids"
+                                },
+                                "memberName": "length"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getBidByProducerAndDay",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "day",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "price",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "energy",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "idx",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bidsIndex"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "producer"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "day"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": ">",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "bids"
+                                                },
+                                                "memberName": "length"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "bids"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    }
+                                                },
+                                                "memberName": "producer"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "producer"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "bids"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    }
+                                                },
+                                                "memberName": "day"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "day"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "TupleExpression",
+                                "components": [
+                                    {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "bids"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        },
+                                        "memberName": "price"
+                                    },
+                                    {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "bids"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        },
+                                        "memberName": "energy"
+                                    }
+                                ],
+                                "isArray": false
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "buy_energy",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "aproducer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aday",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aprice",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "aenergy",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "auserID",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "atimestamp",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "buy_energy_core"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aday"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aprice"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aenergy"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "auserID"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "atimestamp"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "buy_energy",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "aproducer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aday",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aprice",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "aenergy",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "buy_energy_core"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aday"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aprice"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "aenergy"
+                                        },
+                                        {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "consumers"
+                                            },
+                                            "index": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            }
+                                        },
+                                        {
+                                            "type": "NumberLiteral",
+                                            "number": "0",
+                                            "subdenomination": null
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyRegisteredConsumers",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "buy_energy_core",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "aproducer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aday",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "aprice",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "aenergy",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "auserID",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "atimestamp",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "idx",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "bidsIndex"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "aproducer"
+                                        }
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "aday"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "&&",
+                                    "left": {
+                                        "type": "BinaryOperation",
+                                        "operator": "&&",
+                                        "left": {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "BinaryOperation",
+                                                    "operator": ">",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "bids"
+                                                        },
+                                                        "memberName": "length"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    }
+                                                }
+                                            ],
+                                            "isArray": false
+                                        },
+                                        "right": {
+                                            "type": "TupleExpression",
+                                            "components": [
+                                                {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "==",
+                                                    "left": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "bids"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "idx"
+                                                            }
+                                                        },
+                                                        "memberName": "producer"
+                                                    },
+                                                    "right": {
+                                                        "type": "Identifier",
+                                                        "name": "aproducer"
+                                                    }
+                                                }
+                                            ],
+                                            "isArray": false
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "TupleExpression",
+                                        "components": [
+                                            {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "bids"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "idx"
+                                                        }
+                                                    },
+                                                    "memberName": "day"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "aday"
+                                                }
+                                            }
+                                        ],
+                                        "isArray": false
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "require"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "==",
+                                                        "left": {
+                                                            "type": "MemberAccess",
+                                                            "expression": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "bids"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "idx"
+                                                                }
+                                                            },
+                                                            "memberName": "price"
+                                                        },
+                                                        "right": {
+                                                            "type": "Identifier",
+                                                            "name": "aprice"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "asksIdx",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "asksIndex"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "auserID"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "&&",
+                                                "left": {
+                                                    "type": "TupleExpression",
+                                                    "components": [
+                                                        {
+                                                            "type": "BinaryOperation",
+                                                            "operator": ">",
+                                                            "left": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "asks"
+                                                                },
+                                                                "memberName": "length"
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "asksIdx"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "isArray": false
+                                                },
+                                                "right": {
+                                                    "type": "TupleExpression",
+                                                    "components": [
+                                                        {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "==",
+                                                            "left": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "asks"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "asksIdx"
+                                                                    }
+                                                                },
+                                                                "memberName": "day"
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "aday"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "isArray": false
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "FunctionCall",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "require"
+                                                            },
+                                                            "arguments": [
+                                                                {
+                                                                    "type": "BinaryOperation",
+                                                                    "operator": "||",
+                                                                    "left": {
+                                                                        "type": "TupleExpression",
+                                                                        "components": [
+                                                                            {
+                                                                                "type": "BinaryOperation",
+                                                                                "operator": "==",
+                                                                                "left": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "atimestamp"
+                                                                                },
+                                                                                "right": {
+                                                                                    "type": "NumberLiteral",
+                                                                                    "number": "0",
+                                                                                    "subdenomination": null
+                                                                                }
+                                                                            }
+                                                                        ],
+                                                                        "isArray": false
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "TupleExpression",
+                                                                        "components": [
+                                                                            {
+                                                                                "type": "BinaryOperation",
+                                                                                "operator": "<",
+                                                                                "left": {
+                                                                                    "type": "MemberAccess",
+                                                                                    "expression": {
+                                                                                        "type": "IndexAccess",
+                                                                                        "base": {
+                                                                                            "type": "Identifier",
+                                                                                            "name": "asks"
+                                                                                        },
+                                                                                        "index": {
+                                                                                            "type": "Identifier",
+                                                                                            "name": "asksIdx"
+                                                                                        }
+                                                                                    },
+                                                                                    "memberName": "timestamp"
+                                                                                },
+                                                                                "right": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "atimestamp"
+                                                                                }
+                                                                            }
+                                                                        ],
+                                                                        "isArray": false
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "names": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "EmitStatement",
+                                                        "eventCall": {
+                                                            "type": "FunctionCall",
+                                                            "expression": {
+                                                                "type": "Identifier",
+                                                                "name": "DealRevoked"
+                                                            },
+                                                            "arguments": [
+                                                                {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "IndexAccess",
+                                                                        "base": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asks"
+                                                                        },
+                                                                        "index": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asksIdx"
+                                                                        }
+                                                                    },
+                                                                    "memberName": "producer"
+                                                                },
+                                                                {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "IndexAccess",
+                                                                        "base": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asks"
+                                                                        },
+                                                                        "index": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asksIdx"
+                                                                        }
+                                                                    },
+                                                                    "memberName": "day"
+                                                                },
+                                                                {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "IndexAccess",
+                                                                        "base": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asks"
+                                                                        },
+                                                                        "index": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asksIdx"
+                                                                        }
+                                                                    },
+                                                                    "memberName": "price"
+                                                                },
+                                                                {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "IndexAccess",
+                                                                        "base": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asks"
+                                                                        },
+                                                                        "index": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asksIdx"
+                                                                        }
+                                                                    },
+                                                                    "memberName": "energy"
+                                                                },
+                                                                {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "IndexAccess",
+                                                                        "base": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asks"
+                                                                        },
+                                                                        "index": {
+                                                                            "type": "Identifier",
+                                                                            "name": "asksIdx"
+                                                                        }
+                                                                    },
+                                                                    "memberName": "userID"
+                                                                }
+                                                            ],
+                                                            "names": []
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "asksIndex"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "auserID"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "asks"
+                                                    },
+                                                    "memberName": "length"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "asks"
+                                                    },
+                                                    "memberName": "push"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "FunctionCall",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "Ask"
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "aproducer"
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "aday"
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "aprice"
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "aenergy"
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "auserID"
+                                                            },
+                                                            {
+                                                                "type": "Identifier",
+                                                                "name": "atimestamp"
+                                                            }
+                                                        ],
+                                                        "names": [
+                                                            "producer",
+                                                            "day",
+                                                            "price",
+                                                            "energy",
+                                                            "userID",
+                                                            "timestamp"
+                                                        ]
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "EmitStatement",
+                                            "eventCall": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "Deal"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "aproducer"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "aday"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "aprice"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "aenergy"
+                                                    },
+                                                    {
+                                                        "type": "Identifier",
+                                                        "name": "auserID"
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "revert"
+                                                },
+                                                "arguments": [],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getAsksCount",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "count",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "MemberAccess",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "asks"
+                                },
+                                "memberName": "length"
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getAskByUserID",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "userID",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "producer",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "day",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint32"
+                                },
+                                "name": "price",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint64"
+                                },
+                                "name": "energy",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "idx",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "asksIndex"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "userID"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "asks"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    }
+                                                },
+                                                "memberName": "userID"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "userID"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "TupleExpression",
+                                "components": [
+                                    {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "asks"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        },
+                                        "memberName": "producer"
+                                    },
+                                    {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "asks"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        },
+                                        "memberName": "day"
+                                    },
+                                    {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "asks"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        },
+                                        "memberName": "price"
+                                    },
+                                    {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "asks"
+                                            },
+                                            "index": {
+                                                "type": "Identifier",
+                                                "name": "idx"
+                                            }
+                                        },
+                                        "memberName": "energy"
+                                    }
+                                ],
+                                "isArray": false
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

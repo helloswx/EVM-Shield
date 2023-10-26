@@ -1,0 +1,987 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.11"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "BLOCKCHAIN_DEPOSIT_BETA",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "PAYOUT_INTERVAL",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "1",
+                                "subdenomination": "days"
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "1",
+                        "subdenomination": "days"
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "DEPONENT_INTEREST",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "10",
+                                "subdenomination": null
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "10",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "INTEREST_DENOMINATOR",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "number": "1000",
+                                "subdenomination": null
+                            },
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": true,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": {
+                        "type": "NumberLiteral",
+                        "number": "1000",
+                        "subdenomination": null
+                    }
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "Payout",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "paidPeriods",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "depositors",
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "Depositor",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "etherAddress",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "deposit",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "depositTime",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "founderOnly",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "contract_founder"
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "_"
+                                    }
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "contract_founder",
+                            "expression": null,
+                            "visibility": "private",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "contract_latestPayoutTime",
+                            "expression": null,
+                            "visibility": "private",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "Depositor"
+                                },
+                                "length": null
+                            },
+                            "name": "contract_depositors",
+                            "expression": null,
+                            "visibility": "private",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "BLOCKCHAIN_DEPOSIT_BETA",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "contract_founder"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "contract_latestPayoutTime"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "now"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "function()payable{addDepositor();}",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "addDepositor"
+                                    },
+                                    "arguments": [],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "Make_Deposit",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "addDepositor"
+                                    },
+                                    "arguments": [],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "payable"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "status",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "deposit_fond_sum",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "depositorsCount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "unpaidTime",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "unpaidIntervals",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "deposit_fond_sum"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "this"
+                                        },
+                                        "memberName": "balance"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "depositorsCount"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "contract_depositors"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "unpaidTime"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "-",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "now"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "contract_latestPayoutTime"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "unpaidIntervals"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "/",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "unpaidTime"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "PAYOUT_INTERVAL"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "constant"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "performPayouts",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "paidPeriods",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "NumberLiteral",
+                                    "number": "0",
+                                    "subdenomination": null
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "depositorsDepositPayout",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "WhileStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "BinaryOperation",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "contract_latestPayoutTime"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "PAYOUT_INTERVAL"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "now"
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "idx",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": null
+                                        },
+                                        {
+                                            "type": "ForStatement",
+                                            "initExpression": {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    },
+                                                    "right": {
+                                                        "type": "MemberAccess",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "contract_depositors"
+                                                        },
+                                                        "memberName": "length"
+                                                    }
+                                                }
+                                            },
+                                            "conditionExpression": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "UnaryOperation",
+                                                    "operator": "--",
+                                                    "subExpression": {
+                                                        "type": "Identifier",
+                                                        "name": "idx"
+                                                    },
+                                                    "isPrefix": false
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "0",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "loopExpression": {
+                                                "type": "ExpressionStatement",
+                                                "expression": null
+                                            },
+                                            "body": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "IfStatement",
+                                                        "condition": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": ">",
+                                                            "left": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "contract_depositors"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "idx"
+                                                                    }
+                                                                },
+                                                                "memberName": "depositTime"
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "contract_latestPayoutTime"
+                                                                },
+                                                                "right": {
+                                                                    "type": "Identifier",
+                                                                    "name": "PAYOUT_INTERVAL"
+                                                                }
+                                                            }
+                                                        },
+                                                        "TrueBody": ";",
+                                                        "FalseBody": null
+                                                    },
+                                                    {
+                                                        "type": "VariableDeclarationStatement",
+                                                        "variables": [
+                                                            {
+                                                                "type": "VariableDeclaration",
+                                                                "typeName": {
+                                                                    "type": "ElementaryTypeName",
+                                                                    "name": "uint"
+                                                                },
+                                                                "name": "payout",
+                                                                "storageLocation": null
+                                                            }
+                                                        ],
+                                                        "initialValue": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "/",
+                                                            "left": {
+                                                                "type": "TupleExpression",
+                                                                "components": [
+                                                                    {
+                                                                        "type": "BinaryOperation",
+                                                                        "operator": "*",
+                                                                        "left": {
+                                                                            "type": "MemberAccess",
+                                                                            "expression": {
+                                                                                "type": "IndexAccess",
+                                                                                "base": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "contract_depositors"
+                                                                                },
+                                                                                "index": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "idx"
+                                                                                }
+                                                                            },
+                                                                            "memberName": "deposit"
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "Identifier",
+                                                                            "name": "DEPONENT_INTEREST"
+                                                                        }
+                                                                    }
+                                                                ],
+                                                                "isArray": false
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "INTEREST_DENOMINATOR"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "IfStatement",
+                                                        "condition": {
+                                                            "type": "UnaryOperation",
+                                                            "operator": "!",
+                                                            "subExpression": {
+                                                                "type": "FunctionCall",
+                                                                "expression": {
+                                                                    "type": "MemberAccess",
+                                                                    "expression": {
+                                                                        "type": "MemberAccess",
+                                                                        "expression": {
+                                                                            "type": "IndexAccess",
+                                                                            "base": {
+                                                                                "type": "Identifier",
+                                                                                "name": "contract_depositors"
+                                                                            },
+                                                                            "index": {
+                                                                                "type": "Identifier",
+                                                                                "name": "idx"
+                                                                            }
+                                                                        },
+                                                                        "memberName": "etherAddress"
+                                                                    },
+                                                                    "memberName": "send"
+                                                                },
+                                                                "arguments": [
+                                                                    {
+                                                                        "type": "Identifier",
+                                                                        "name": "payout"
+                                                                    }
+                                                                ],
+                                                                "names": []
+                                                            },
+                                                            "isPrefix": true
+                                                        },
+                                                        "TrueBody": {
+                                                            "type": "ThrowStatement"
+                                                        },
+                                                        "FalseBody": null
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "+=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "depositorsDepositPayout"
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "payout"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "+=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "contract_latestPayoutTime"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "PAYOUT_INTERVAL"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "UnaryOperation",
+                                                "operator": "++",
+                                                "subExpression": {
+                                                    "type": "Identifier",
+                                                    "name": "paidPeriods"
+                                                },
+                                                "isPrefix": false
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "Payout"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "paidPeriods"
+                                        },
+                                        {
+                                            "type": "Identifier",
+                                            "name": "depositorsDepositPayout"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addDepositor",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "contract_depositors"
+                                        },
+                                        "memberName": "push"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "FunctionCall",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "Depositor"
+                                            },
+                                            "arguments": [
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "sender"
+                                                },
+                                                {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "msg"
+                                                    },
+                                                    "memberName": "value"
+                                                },
+                                                {
+                                                    "type": "Identifier",
+                                                    "name": "now"
+                                                }
+                                            ],
+                                            "names": []
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "private",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "changeFounderAddress",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "newFounder",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "contract_founder"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "newFounder"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "default",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "founderOnly",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

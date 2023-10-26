@@ -1,0 +1,1678 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.5.0"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "CryptoTycoonsVIPLib",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address",
+                                "stateMutability": "payable"
+                            },
+                            "name": "owner",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                }
+                            },
+                            "name": "userExpPool",
+                            "expression": null,
+                            "visibility": "default",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "Mapping",
+                                "keyType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "valueType": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bool"
+                                }
+                            },
+                            "name": "callerMap",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyOwner",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "owner"
+                                            }
+                                        },
+                                        {
+                                            "type": "stringLiteral",
+                                            "value": "OnlyOwner methods called by non-owner."
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyCaller",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "bool"
+                                        },
+                                        "name": "isCaller",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "callerMap"
+                                    },
+                                    "index": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "isCaller"
+                                        },
+                                        {
+                                            "type": "stringLiteral",
+                                            "value": "onlyCaller methods called by non-caller."
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "constructor",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "owner"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "callerMap"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": true,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "kill",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "selfdestruct"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "owner"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addCaller",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "caller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "bool"
+                                        },
+                                        "name": "isCaller",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "callerMap"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "caller"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "isCaller"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": false
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "callerMap"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "caller"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BooleanLiteral",
+                                                    "value": true
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "deleteCaller",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "caller",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "bool"
+                                        },
+                                        "name": "isCaller",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "callerMap"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "caller"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "isCaller"
+                                    },
+                                    "right": {
+                                        "type": "BooleanLiteral",
+                                        "value": true
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "callerMap"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "caller"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BooleanLiteral",
+                                                    "value": false
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": null
+                            }
+                        ]
+                    },
+                    "visibility": "external",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyOwner",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addUserExp",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "addr",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "amount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "exp",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "userExpPool"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "addr"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "exp"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "exp"
+                                        },
+                                        "right": {
+                                            "type": "Identifier",
+                                            "name": "amount"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "userExpPool"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "addr"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "exp"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyCaller",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getUserExp",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "addr",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "exp",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "IndexAccess",
+                                "base": {
+                                    "type": "Identifier",
+                                    "name": "userExpPool"
+                                },
+                                "index": {
+                                    "type": "Identifier",
+                                    "name": "addr"
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getVIPLevel",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "user",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "level",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "exp",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "IndexAccess",
+                                    "base": {
+                                        "type": "Identifier",
+                                        "name": "userExpPool"
+                                    },
+                                    "index": {
+                                        "type": "Identifier",
+                                        "name": "user"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "&&",
+                                    "left": {
+                                        "type": "BinaryOperation",
+                                        "operator": ">=",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "exp"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "30",
+                                            "subdenomination": "ether"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "<",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "exp"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "150",
+                                            "subdenomination": "ether"
+                                        }
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "level"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "1",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "IfStatement",
+                                    "condition": {
+                                        "type": "BinaryOperation",
+                                        "operator": "&&",
+                                        "left": {
+                                            "type": "BinaryOperation",
+                                            "operator": ">=",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "exp"
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "150",
+                                                "subdenomination": "ether"
+                                            }
+                                        },
+                                        "right": {
+                                            "type": "BinaryOperation",
+                                            "operator": "<",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "exp"
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "300",
+                                                "subdenomination": "ether"
+                                            }
+                                        }
+                                    },
+                                    "TrueBody": {
+                                        "type": "Block",
+                                        "statements": [
+                                            {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "level"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "2",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "FalseBody": {
+                                        "type": "IfStatement",
+                                        "condition": {
+                                            "type": "BinaryOperation",
+                                            "operator": "&&",
+                                            "left": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "exp"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "300",
+                                                    "subdenomination": "ether"
+                                                }
+                                            },
+                                            "right": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "exp"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "1500",
+                                                    "subdenomination": "ether"
+                                                }
+                                            }
+                                        },
+                                        "TrueBody": {
+                                            "type": "Block",
+                                            "statements": [
+                                                {
+                                                    "type": "ExpressionStatement",
+                                                    "expression": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "=",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "level"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "3",
+                                                            "subdenomination": null
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "FalseBody": {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "&&",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": ">=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "exp"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1500",
+                                                        "subdenomination": "ether"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "<",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "exp"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "3000",
+                                                        "subdenomination": "ether"
+                                                    }
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "level"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "4",
+                                                                "subdenomination": null
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": {
+                                                "type": "IfStatement",
+                                                "condition": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "&&",
+                                                    "left": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": ">=",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "exp"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "3000",
+                                                            "subdenomination": "ether"
+                                                        }
+                                                    },
+                                                    "right": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "<",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "exp"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "15000",
+                                                            "subdenomination": "ether"
+                                                        }
+                                                    }
+                                                },
+                                                "TrueBody": {
+                                                    "type": "Block",
+                                                    "statements": [
+                                                        {
+                                                            "type": "ExpressionStatement",
+                                                            "expression": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "=",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "level"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "5",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "FalseBody": {
+                                                    "type": "IfStatement",
+                                                    "condition": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "&&",
+                                                        "left": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": ">=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "exp"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "15000",
+                                                                "subdenomination": "ether"
+                                                            }
+                                                        },
+                                                        "right": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "<",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "exp"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "30000",
+                                                                "subdenomination": "ether"
+                                                            }
+                                                        }
+                                                    },
+                                                    "TrueBody": {
+                                                        "type": "Block",
+                                                        "statements": [
+                                                            {
+                                                                "type": "ExpressionStatement",
+                                                                "expression": {
+                                                                    "type": "BinaryOperation",
+                                                                    "operator": "=",
+                                                                    "left": {
+                                                                        "type": "Identifier",
+                                                                        "name": "level"
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "NumberLiteral",
+                                                                        "number": "6",
+                                                                        "subdenomination": null
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    "FalseBody": {
+                                                        "type": "IfStatement",
+                                                        "condition": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "&&",
+                                                            "left": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": ">=",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "exp"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "30000",
+                                                                    "subdenomination": "ether"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "<",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "exp"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "150000",
+                                                                    "subdenomination": "ether"
+                                                                }
+                                                            }
+                                                        },
+                                                        "TrueBody": {
+                                                            "type": "Block",
+                                                            "statements": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "BinaryOperation",
+                                                                        "operator": "=",
+                                                                        "left": {
+                                                                            "type": "Identifier",
+                                                                            "name": "level"
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "NumberLiteral",
+                                                                            "number": "7",
+                                                                            "subdenomination": null
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        },
+                                                        "FalseBody": {
+                                                            "type": "IfStatement",
+                                                            "condition": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": ">=",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "exp"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "150000",
+                                                                    "subdenomination": "ether"
+                                                                }
+                                                            },
+                                                            "TrueBody": {
+                                                                "type": "Block",
+                                                                "statements": [
+                                                                    {
+                                                                        "type": "ExpressionStatement",
+                                                                        "expression": {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "=",
+                                                                            "left": {
+                                                                                "type": "Identifier",
+                                                                                "name": "level"
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "NumberLiteral",
+                                                                                "number": "8",
+                                                                                "subdenomination": null
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "FalseBody": {
+                                                                "type": "Block",
+                                                                "statements": [
+                                                                    {
+                                                                        "type": "ExpressionStatement",
+                                                                        "expression": {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "=",
+                                                                            "left": {
+                                                                                "type": "Identifier",
+                                                                                "name": "level"
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "NumberLiteral",
+                                                                                "number": "0",
+                                                                                "subdenomination": null
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "Identifier",
+                                "name": "level"
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "getVIPBounusRate",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "user",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint256"
+                                },
+                                "name": "rate",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "level",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "getVIPLevel"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "user"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "IfStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": "==",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "level"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "1",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "TrueBody": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "rate"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "1",
+                                                    "subdenomination": null
+                                                }
+                                            }
+                                        }
+                                    ]
+                                },
+                                "FalseBody": {
+                                    "type": "IfStatement",
+                                    "condition": {
+                                        "type": "BinaryOperation",
+                                        "operator": "==",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "level"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "2",
+                                            "subdenomination": null
+                                        }
+                                    },
+                                    "TrueBody": {
+                                        "type": "Block",
+                                        "statements": [
+                                            {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "=",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "rate"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "2",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "FalseBody": {
+                                        "type": "IfStatement",
+                                        "condition": {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "level"
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "3",
+                                                "subdenomination": null
+                                            }
+                                        },
+                                        "TrueBody": {
+                                            "type": "Block",
+                                            "statements": [
+                                                {
+                                                    "type": "ExpressionStatement",
+                                                    "expression": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "=",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "rate"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "3",
+                                                            "subdenomination": null
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        "FalseBody": {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "level"
+                                                },
+                                                "right": {
+                                                    "type": "NumberLiteral",
+                                                    "number": "4",
+                                                    "subdenomination": null
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "rate"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "4",
+                                                                "subdenomination": null
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": {
+                                                "type": "IfStatement",
+                                                "condition": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "==",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "level"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "5",
+                                                        "subdenomination": null
+                                                    }
+                                                },
+                                                "TrueBody": {
+                                                    "type": "Block",
+                                                    "statements": [
+                                                        {
+                                                            "type": "ExpressionStatement",
+                                                            "expression": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "=",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "rate"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "5",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "FalseBody": {
+                                                    "type": "IfStatement",
+                                                    "condition": {
+                                                        "type": "BinaryOperation",
+                                                        "operator": "==",
+                                                        "left": {
+                                                            "type": "Identifier",
+                                                            "name": "level"
+                                                        },
+                                                        "right": {
+                                                            "type": "NumberLiteral",
+                                                            "number": "6",
+                                                            "subdenomination": null
+                                                        }
+                                                    },
+                                                    "TrueBody": {
+                                                        "type": "Block",
+                                                        "statements": [
+                                                            {
+                                                                "type": "ExpressionStatement",
+                                                                "expression": {
+                                                                    "type": "BinaryOperation",
+                                                                    "operator": "=",
+                                                                    "left": {
+                                                                        "type": "Identifier",
+                                                                        "name": "rate"
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "NumberLiteral",
+                                                                        "number": "7",
+                                                                        "subdenomination": null
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    },
+                                                    "FalseBody": {
+                                                        "type": "IfStatement",
+                                                        "condition": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "==",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "level"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "7",
+                                                                "subdenomination": null
+                                                            }
+                                                        },
+                                                        "TrueBody": {
+                                                            "type": "Block",
+                                                            "statements": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "BinaryOperation",
+                                                                        "operator": "=",
+                                                                        "left": {
+                                                                            "type": "Identifier",
+                                                                            "name": "rate"
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "NumberLiteral",
+                                                                            "number": "9",
+                                                                            "subdenomination": null
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        },
+                                                        "FalseBody": {
+                                                            "type": "IfStatement",
+                                                            "condition": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "==",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "level"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "8",
+                                                                    "subdenomination": null
+                                                                }
+                                                            },
+                                                            "TrueBody": {
+                                                                "type": "Block",
+                                                                "statements": [
+                                                                    {
+                                                                        "type": "ExpressionStatement",
+                                                                        "expression": {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "=",
+                                                                            "left": {
+                                                                                "type": "Identifier",
+                                                                                "name": "rate"
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "NumberLiteral",
+                                                                                "number": "11",
+                                                                                "subdenomination": null
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ]
+                                                            },
+                                                            "FalseBody": {
+                                                                "type": "IfStatement",
+                                                                "condition": {
+                                                                    "type": "BinaryOperation",
+                                                                    "operator": "==",
+                                                                    "left": {
+                                                                        "type": "Identifier",
+                                                                        "name": "level"
+                                                                    },
+                                                                    "right": {
+                                                                        "type": "NumberLiteral",
+                                                                        "number": "9",
+                                                                        "subdenomination": null
+                                                                    }
+                                                                },
+                                                                "TrueBody": {
+                                                                    "type": "Block",
+                                                                    "statements": [
+                                                                        {
+                                                                            "type": "ExpressionStatement",
+                                                                            "expression": {
+                                                                                "type": "BinaryOperation",
+                                                                                "operator": "=",
+                                                                                "left": {
+                                                                                    "type": "Identifier",
+                                                                                    "name": "rate"
+                                                                                },
+                                                                                "right": {
+                                                                                    "type": "NumberLiteral",
+                                                                                    "number": "13",
+                                                                                    "subdenomination": null
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                "FalseBody": {
+                                                                    "type": "IfStatement",
+                                                                    "condition": {
+                                                                        "type": "BinaryOperation",
+                                                                        "operator": "==",
+                                                                        "left": {
+                                                                            "type": "Identifier",
+                                                                            "name": "level"
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "NumberLiteral",
+                                                                            "number": "10",
+                                                                            "subdenomination": null
+                                                                        }
+                                                                    },
+                                                                    "TrueBody": {
+                                                                        "type": "Block",
+                                                                        "statements": [
+                                                                            {
+                                                                                "type": "ExpressionStatement",
+                                                                                "expression": {
+                                                                                    "type": "BinaryOperation",
+                                                                                    "operator": "=",
+                                                                                    "left": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "rate"
+                                                                                    },
+                                                                                    "right": {
+                                                                                        "type": "NumberLiteral",
+                                                                                        "number": "15",
+                                                                                        "subdenomination": null
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    },
+                                                                    "FalseBody": {
+                                                                        "type": "Block",
+                                                                        "statements": [
+                                                                            {
+                                                                                "type": "ExpressionStatement",
+                                                                                "expression": {
+                                                                                    "type": "BinaryOperation",
+                                                                                    "operator": "=",
+                                                                                    "left": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "rate"
+                                                                                    },
+                                                                                    "right": {
+                                                                                        "type": "NumberLiteral",
+                                                                                        "number": "0",
+                                                                                        "subdenomination": null
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}

@@ -1,0 +1,3024 @@
+{
+    "type": "SourceUnit",
+    "children": [
+        {
+            "type": "PragmaDirective",
+            "name": "solidity",
+            "value": "^0.4.19"
+        },
+        {
+            "type": "ContractDefinition",
+            "name": "Ballot",
+            "baseContracts": [],
+            "subNodes": [
+                {
+                    "type": "StructDefinition",
+                    "name": "Voter",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "weight",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bytes32"
+                            },
+                            "name": "voterName",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "proposalId",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StructDefinition",
+                    "name": "Proposal",
+                    "members": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "proposalId",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "bytes32"
+                            },
+                            "name": "proposalName",
+                            "storageLocation": null
+                        },
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "uint"
+                            },
+                            "name": "voteCount",
+                            "storageLocation": null
+                        }
+                    ]
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ElementaryTypeName",
+                                "name": "address"
+                            },
+                            "name": "chairperson",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "StateVariableDeclaration",
+                    "variables": [
+                        {
+                            "type": "VariableDeclaration",
+                            "typeName": {
+                                "type": "ArrayTypeName",
+                                "baseTypeName": {
+                                    "type": "UserDefinedTypeName",
+                                    "namePath": "Proposal"
+                                },
+                                "length": null
+                            },
+                            "name": "proposals",
+                            "expression": null,
+                            "visibility": "public",
+                            "isStateVar": true,
+                            "isDeclaredConst": false,
+                            "isIndexed": false
+                        }
+                    ],
+                    "initialValue": null
+                },
+                {
+                    "type": "EventDefinition",
+                    "name": "BatchVote",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "VariableDeclaration",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "_from",
+                                "isStateVar": false,
+                                "isIndexed": true
+                            }
+                        ]
+                    },
+                    "isAnonymous": false
+                },
+                {
+                    "type": "ModifierDefinition",
+                    "name": "onlyChairperson",
+                    "parameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "msg"
+                                                },
+                                                "memberName": "sender"
+                                            },
+                                            "right": {
+                                                "type": "Identifier",
+                                                "name": "chairperson"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "Identifier",
+                                    "name": "_"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "transferChairperson",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "address"
+                                },
+                                "name": "newChairperson",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "chairperson"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "newChairperson"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyChairperson",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "Ballot",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "proposalNames",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "chairperson"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "msg"
+                                        },
+                                        "memberName": "sender"
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "proposalNames"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "proposals"
+                                                    },
+                                                    "memberName": "push"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "FunctionCall",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "Proposal"
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "proposals"
+                                                                },
+                                                                "memberName": "length"
+                                                            },
+                                                            {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "proposalNames"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "i"
+                                                                }
+                                                            },
+                                                            {
+                                                                "type": "NumberLiteral",
+                                                                "number": "0",
+                                                                "subdenomination": null
+                                                            }
+                                                        ],
+                                                        "names": [
+                                                            "proposalId",
+                                                            "proposalName",
+                                                            "voteCount"
+                                                        ]
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "addProposals",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "proposalNames",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "proposalNames"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "proposals"
+                                                    },
+                                                    "memberName": "push"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "FunctionCall",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "Proposal"
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "proposals"
+                                                                },
+                                                                "memberName": "length"
+                                                            },
+                                                            {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "proposalNames"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "i"
+                                                                }
+                                                            },
+                                                            {
+                                                                "type": "NumberLiteral",
+                                                                "number": "0",
+                                                                "subdenomination": null
+                                                            }
+                                                        ],
+                                                        "names": [
+                                                            "proposalId",
+                                                            "proposalName",
+                                                            "voteCount"
+                                                        ]
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyChairperson",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "vote",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint"
+                                    },
+                                    "length": null
+                                },
+                                "name": "weights",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "voterNames",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint"
+                                    },
+                                    "length": null
+                                },
+                                "name": "proposalIds",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "weights"
+                                                },
+                                                "memberName": "length"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "voterNames"
+                                                },
+                                                "memberName": "length"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "weights"
+                                                },
+                                                "memberName": "length"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "proposalIds"
+                                                },
+                                                "memberName": "length"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "require"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "==",
+                                            "left": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "voterNames"
+                                                },
+                                                "memberName": "length"
+                                            },
+                                            "right": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "proposalIds"
+                                                },
+                                                "memberName": "length"
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "weights"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "UserDefinedTypeName",
+                                                        "namePath": "Voter"
+                                                    },
+                                                    "name": "voter",
+                                                    "storageLocation": "memory"
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "Voter"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "weights"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "voterNames"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "proposalIds"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": [
+                                                    "weight",
+                                                    "voterName",
+                                                    "proposalId"
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "+=",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "proposals"
+                                                        },
+                                                        "index": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "-",
+                                                            "left": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "voter"
+                                                                },
+                                                                "memberName": "proposalId"
+                                                            },
+                                                            "right": {
+                                                                "type": "NumberLiteral",
+                                                                "number": "1",
+                                                                "subdenomination": null
+                                                            }
+                                                        }
+                                                    },
+                                                    "memberName": "voteCount"
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "voter"
+                                                    },
+                                                    "memberName": "weight"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "BatchVote"
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "MemberAccess",
+                                            "expression": {
+                                                "type": "Identifier",
+                                                "name": "msg"
+                                            },
+                                            "memberName": "sender"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyChairperson",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "winningProposal",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "winningProposal",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "winningVoteCount",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "NumberLiteral",
+                                    "number": "0",
+                                    "subdenomination": null
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "p",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "p"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "proposals"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "p"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "proposals"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "p"
+                                                        }
+                                                    },
+                                                    "memberName": "voteCount"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "winningVoteCount"
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "winningVoteCount"
+                                                            },
+                                                            "right": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "proposals"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "p"
+                                                                    }
+                                                                },
+                                                                "memberName": "voteCount"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "winningProposal"
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "p"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "internal",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "winnerName",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "winnerName",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "winnerName"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "IndexAccess",
+                                            "base": {
+                                                "type": "Identifier",
+                                                "name": "proposals"
+                                            },
+                                            "index": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "winningProposal"
+                                                },
+                                                "arguments": [],
+                                                "names": []
+                                            }
+                                        },
+                                        "memberName": "proposalName"
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "resetBallot",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "proposalNames",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": [],
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "UnaryOperation",
+                                    "operator": "delete",
+                                    "subExpression": {
+                                        "type": "Identifier",
+                                        "name": "proposals"
+                                    },
+                                    "isPrefix": true
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "proposalNames"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "Identifier",
+                                                        "name": "proposals"
+                                                    },
+                                                    "memberName": "push"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "FunctionCall",
+                                                        "expression": {
+                                                            "type": "Identifier",
+                                                            "name": "Proposal"
+                                                        },
+                                                        "arguments": [
+                                                            {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "Identifier",
+                                                                    "name": "proposals"
+                                                                },
+                                                                "memberName": "length"
+                                                            },
+                                                            {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "proposalNames"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "i"
+                                                                }
+                                                            },
+                                                            {
+                                                                "type": "NumberLiteral",
+                                                                "number": "0",
+                                                                "subdenomination": null
+                                                            }
+                                                        ],
+                                                        "names": [
+                                                            "proposalId",
+                                                            "proposalName",
+                                                            "voteCount"
+                                                        ]
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [
+                        {
+                            "type": "ModifierInvocation",
+                            "name": "onlyChairperson",
+                            "arguments": []
+                        }
+                    ],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": null
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "batchSearchProposalsId",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "proposalsName",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint"
+                                    },
+                                    "length": null
+                                },
+                                "name": "proposalsId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "proposalsId"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "NewExpression",
+                                            "typeName": {
+                                                "type": "ArrayTypeName",
+                                                "baseTypeName": {
+                                                    "type": "ElementaryTypeName",
+                                                    "name": "uint"
+                                                },
+                                                "length": null
+                                            }
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "proposalsName"
+                                                },
+                                                "memberName": "length"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "proposalsName"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "proposalId",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "FunctionCall",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "searchProposalId"
+                                                },
+                                                "arguments": [
+                                                    {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "proposalsName"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    }
+                                                ],
+                                                "names": []
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "proposalsId"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "proposalId"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "searchProposalId",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "bytes32"
+                                },
+                                "name": "proposalName",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ElementaryTypeName",
+                                    "name": "uint"
+                                },
+                                "name": "proposalId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "VariableDeclarationStatement",
+                                    "variables": [
+                                        {
+                                            "type": "VariableDeclaration",
+                                            "typeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "name": "i",
+                                            "storageLocation": null
+                                        }
+                                    ],
+                                    "initialValue": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "MemberAccess",
+                                        "expression": {
+                                            "type": "Identifier",
+                                            "name": "proposals"
+                                        },
+                                        "memberName": "length"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "==",
+                                                "left": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "proposals"
+                                                        },
+                                                        "index": {
+                                                            "type": "Identifier",
+                                                            "name": "i"
+                                                        }
+                                                    },
+                                                    "memberName": "proposalName"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "proposalName"
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "proposalId"
+                                                            },
+                                                            "right": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "proposals"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "i"
+                                                                    }
+                                                                },
+                                                                "memberName": "proposalId"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                },
+                {
+                    "type": "FunctionDefinition",
+                    "name": "proposalsRank",
+                    "parameters": {
+                        "type": "ParameterList",
+                        "parameters": []
+                    },
+                    "returnParameters": {
+                        "type": "ParameterList",
+                        "parameters": [
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint"
+                                    },
+                                    "length": null
+                                },
+                                "name": "rankByProposalId",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "bytes32"
+                                    },
+                                    "length": null
+                                },
+                                "name": "rankByName",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            },
+                            {
+                                "type": "Parameter",
+                                "typeName": {
+                                    "type": "ArrayTypeName",
+                                    "baseTypeName": {
+                                        "type": "ElementaryTypeName",
+                                        "name": "uint"
+                                    },
+                                    "length": null
+                                },
+                                "name": "rankByvoteCount",
+                                "storageLocation": null,
+                                "isStateVar": false,
+                                "isIndexed": false
+                            }
+                        ]
+                    },
+                    "body": {
+                        "type": "Block",
+                        "statements": [
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "n",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "MemberAccess",
+                                    "expression": {
+                                        "type": "Identifier",
+                                        "name": "proposals"
+                                    },
+                                    "memberName": "length"
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ArrayTypeName",
+                                            "baseTypeName": {
+                                                "type": "UserDefinedTypeName",
+                                                "namePath": "Proposal"
+                                            },
+                                            "length": null
+                                        },
+                                        "name": "arr",
+                                        "storageLocation": "memory"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "NewExpression",
+                                        "typeName": {
+                                            "type": "ArrayTypeName",
+                                            "baseTypeName": {
+                                                "type": "UserDefinedTypeName",
+                                                "namePath": "Proposal"
+                                            },
+                                            "length": null
+                                        }
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "Identifier",
+                                            "name": "n"
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "i",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": null
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "BinaryOperation",
+                                        "operator": "=",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "0",
+                                            "subdenomination": null
+                                        }
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "n"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "arr"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "proposals"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ArrayTypeName",
+                                            "baseTypeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "length": null
+                                        },
+                                        "name": "stack",
+                                        "storageLocation": "memory"
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "FunctionCall",
+                                    "expression": {
+                                        "type": "NewExpression",
+                                        "typeName": {
+                                            "type": "ArrayTypeName",
+                                            "baseTypeName": {
+                                                "type": "ElementaryTypeName",
+                                                "name": "uint"
+                                            },
+                                            "length": null
+                                        }
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "BinaryOperation",
+                                            "operator": "+",
+                                            "left": {
+                                                "type": "Identifier",
+                                                "name": "n"
+                                            },
+                                            "right": {
+                                                "type": "NumberLiteral",
+                                                "number": "2",
+                                                "subdenomination": null
+                                            }
+                                        }
+                                    ],
+                                    "names": []
+                                }
+                            },
+                            {
+                                "type": "VariableDeclarationStatement",
+                                "variables": [
+                                    {
+                                        "type": "VariableDeclaration",
+                                        "typeName": {
+                                            "type": "ElementaryTypeName",
+                                            "name": "uint"
+                                        },
+                                        "name": "top",
+                                        "storageLocation": null
+                                    }
+                                ],
+                                "initialValue": {
+                                    "type": "NumberLiteral",
+                                    "number": "1",
+                                    "subdenomination": null
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "stack"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "top"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "top"
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "+",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "top"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "1",
+                                            "subdenomination": null
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "IndexAccess",
+                                        "base": {
+                                            "type": "Identifier",
+                                            "name": "stack"
+                                        },
+                                        "index": {
+                                            "type": "Identifier",
+                                            "name": "top"
+                                        }
+                                    },
+                                    "right": {
+                                        "type": "BinaryOperation",
+                                        "operator": "-",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "n"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "1",
+                                            "subdenomination": null
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "type": "WhileStatement",
+                                "condition": {
+                                    "type": "BinaryOperation",
+                                    "operator": ">",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "top"
+                                    },
+                                    "right": {
+                                        "type": "NumberLiteral",
+                                        "number": "0",
+                                        "subdenomination": null
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "h",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "stack"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "top"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "top"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "-",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "top"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "l",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "IndexAccess",
+                                                "base": {
+                                                    "type": "Identifier",
+                                                    "name": "stack"
+                                                },
+                                                "index": {
+                                                    "type": "Identifier",
+                                                    "name": "top"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "top"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "-",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "top"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "i"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "l"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "x",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "MemberAccess",
+                                                "expression": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "arr"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "h"
+                                                    }
+                                                },
+                                                "memberName": "voteCount"
+                                            }
+                                        },
+                                        {
+                                            "type": "ForStatement",
+                                            "initExpression": {
+                                                "type": "VariableDeclarationStatement",
+                                                "variables": [
+                                                    {
+                                                        "type": "VariableDeclaration",
+                                                        "typeName": {
+                                                            "type": "ElementaryTypeName",
+                                                            "name": "uint"
+                                                        },
+                                                        "name": "j",
+                                                        "storageLocation": null
+                                                    }
+                                                ],
+                                                "initialValue": {
+                                                    "type": "Identifier",
+                                                    "name": "l"
+                                                }
+                                            },
+                                            "conditionExpression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "j"
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "h"
+                                                }
+                                            },
+                                            "loopExpression": {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "UnaryOperation",
+                                                    "operator": "++",
+                                                    "subExpression": {
+                                                        "type": "Identifier",
+                                                        "name": "j"
+                                                    },
+                                                    "isPrefix": false
+                                                }
+                                            },
+                                            "body": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "IfStatement",
+                                                        "condition": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "<=",
+                                                            "left": {
+                                                                "type": "MemberAccess",
+                                                                "expression": {
+                                                                    "type": "IndexAccess",
+                                                                    "base": {
+                                                                        "type": "Identifier",
+                                                                        "name": "arr"
+                                                                    },
+                                                                    "index": {
+                                                                        "type": "Identifier",
+                                                                        "name": "j"
+                                                                    }
+                                                                },
+                                                                "memberName": "voteCount"
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "x"
+                                                            }
+                                                        },
+                                                        "TrueBody": {
+                                                            "type": "Block",
+                                                            "statements": [
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "BinaryOperation",
+                                                                        "operator": "=",
+                                                                        "left": {
+                                                                            "type": "TupleExpression",
+                                                                            "components": [
+                                                                                {
+                                                                                    "type": "IndexAccess",
+                                                                                    "base": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "arr"
+                                                                                    },
+                                                                                    "index": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "i"
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "IndexAccess",
+                                                                                    "base": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "arr"
+                                                                                    },
+                                                                                    "index": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "j"
+                                                                                    }
+                                                                                }
+                                                                            ],
+                                                                            "isArray": false
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "TupleExpression",
+                                                                            "components": [
+                                                                                {
+                                                                                    "type": "IndexAccess",
+                                                                                    "base": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "arr"
+                                                                                    },
+                                                                                    "index": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "j"
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "type": "IndexAccess",
+                                                                                    "base": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "arr"
+                                                                                    },
+                                                                                    "index": {
+                                                                                        "type": "Identifier",
+                                                                                        "name": "i"
+                                                                                    }
+                                                                                }
+                                                                            ],
+                                                                            "isArray": false
+                                                                        }
+                                                                    }
+                                                                },
+                                                                {
+                                                                    "type": "ExpressionStatement",
+                                                                    "expression": {
+                                                                        "type": "BinaryOperation",
+                                                                        "operator": "=",
+                                                                        "left": {
+                                                                            "type": "Identifier",
+                                                                            "name": "i"
+                                                                        },
+                                                                        "right": {
+                                                                            "type": "BinaryOperation",
+                                                                            "operator": "+",
+                                                                            "left": {
+                                                                                "type": "Identifier",
+                                                                                "name": "i"
+                                                                            },
+                                                                            "right": {
+                                                                                "type": "NumberLiteral",
+                                                                                "number": "1",
+                                                                                "subdenomination": null
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            ]
+                                                        },
+                                                        "FalseBody": null
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "TupleExpression",
+                                                    "components": [
+                                                        {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "arr"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "i"
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "arr"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "h"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "isArray": false
+                                                },
+                                                "right": {
+                                                    "type": "TupleExpression",
+                                                    "components": [
+                                                        {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "arr"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "h"
+                                                            }
+                                                        },
+                                                        {
+                                                            "type": "IndexAccess",
+                                                            "base": {
+                                                                "type": "Identifier",
+                                                                "name": "arr"
+                                                            },
+                                                            "index": {
+                                                                "type": "Identifier",
+                                                                "name": "i"
+                                                            }
+                                                        }
+                                                    ],
+                                                    "isArray": false
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "VariableDeclarationStatement",
+                                            "variables": [
+                                                {
+                                                    "type": "VariableDeclaration",
+                                                    "typeName": {
+                                                        "type": "ElementaryTypeName",
+                                                        "name": "uint"
+                                                    },
+                                                    "name": "p",
+                                                    "storageLocation": null
+                                                }
+                                            ],
+                                            "initialValue": {
+                                                "type": "Identifier",
+                                                "name": "i"
+                                            }
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": ">",
+                                                "left": {
+                                                    "type": "Identifier",
+                                                    "name": "p"
+                                                },
+                                                "right": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "l"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": null
+                                                    }
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "top"
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "stack"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "l"
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "top"
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "stack"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "-",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "p"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        },
+                                        {
+                                            "type": "IfStatement",
+                                            "condition": {
+                                                "type": "BinaryOperation",
+                                                "operator": "<",
+                                                "left": {
+                                                    "type": "BinaryOperation",
+                                                    "operator": "+",
+                                                    "left": {
+                                                        "type": "Identifier",
+                                                        "name": "p"
+                                                    },
+                                                    "right": {
+                                                        "type": "NumberLiteral",
+                                                        "number": "1",
+                                                        "subdenomination": null
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "Identifier",
+                                                    "name": "h"
+                                                }
+                                            },
+                                            "TrueBody": {
+                                                "type": "Block",
+                                                "statements": [
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "top"
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "stack"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "p"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "Identifier",
+                                                                "name": "top"
+                                                            },
+                                                            "right": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "+",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "ExpressionStatement",
+                                                        "expression": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "=",
+                                                            "left": {
+                                                                "type": "IndexAccess",
+                                                                "base": {
+                                                                    "type": "Identifier",
+                                                                    "name": "stack"
+                                                                },
+                                                                "index": {
+                                                                    "type": "Identifier",
+                                                                    "name": "top"
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "h"
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "FalseBody": null
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "rankByProposalId"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "NewExpression",
+                                            "typeName": {
+                                                "type": "ArrayTypeName",
+                                                "baseTypeName": {
+                                                    "type": "ElementaryTypeName",
+                                                    "name": "uint"
+                                                },
+                                                "length": null
+                                            }
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "n"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "rankByName"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "NewExpression",
+                                            "typeName": {
+                                                "type": "ArrayTypeName",
+                                                "baseTypeName": {
+                                                    "type": "ElementaryTypeName",
+                                                    "name": "bytes32"
+                                                },
+                                                "length": null
+                                            }
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "n"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ExpressionStatement",
+                                "expression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "=",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "rankByvoteCount"
+                                    },
+                                    "right": {
+                                        "type": "FunctionCall",
+                                        "expression": {
+                                            "type": "NewExpression",
+                                            "typeName": {
+                                                "type": "ArrayTypeName",
+                                                "baseTypeName": {
+                                                    "type": "ElementaryTypeName",
+                                                    "name": "uint"
+                                                },
+                                                "length": null
+                                            }
+                                        },
+                                        "arguments": [
+                                            {
+                                                "type": "Identifier",
+                                                "name": "n"
+                                            }
+                                        ],
+                                        "names": []
+                                    }
+                                }
+                            },
+                            {
+                                "type": "ForStatement",
+                                "initExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "BinaryOperation",
+                                        "operator": "=",
+                                        "left": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "right": {
+                                            "type": "NumberLiteral",
+                                            "number": "0",
+                                            "subdenomination": null
+                                        }
+                                    }
+                                },
+                                "conditionExpression": {
+                                    "type": "BinaryOperation",
+                                    "operator": "<",
+                                    "left": {
+                                        "type": "Identifier",
+                                        "name": "i"
+                                    },
+                                    "right": {
+                                        "type": "Identifier",
+                                        "name": "n"
+                                    }
+                                },
+                                "loopExpression": {
+                                    "type": "ExpressionStatement",
+                                    "expression": {
+                                        "type": "UnaryOperation",
+                                        "operator": "++",
+                                        "subExpression": {
+                                            "type": "Identifier",
+                                            "name": "i"
+                                        },
+                                        "isPrefix": false
+                                    }
+                                },
+                                "body": {
+                                    "type": "Block",
+                                    "statements": [
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "rankByProposalId"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "arr"
+                                                        },
+                                                        "index": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "-",
+                                                            "left": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "-",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "n"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "i"
+                                                            }
+                                                        }
+                                                    },
+                                                    "memberName": "proposalId"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "rankByName"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "arr"
+                                                        },
+                                                        "index": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "-",
+                                                            "left": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "-",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "n"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "i"
+                                                            }
+                                                        }
+                                                    },
+                                                    "memberName": "proposalName"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "type": "ExpressionStatement",
+                                            "expression": {
+                                                "type": "BinaryOperation",
+                                                "operator": "=",
+                                                "left": {
+                                                    "type": "IndexAccess",
+                                                    "base": {
+                                                        "type": "Identifier",
+                                                        "name": "rankByvoteCount"
+                                                    },
+                                                    "index": {
+                                                        "type": "Identifier",
+                                                        "name": "i"
+                                                    }
+                                                },
+                                                "right": {
+                                                    "type": "MemberAccess",
+                                                    "expression": {
+                                                        "type": "IndexAccess",
+                                                        "base": {
+                                                            "type": "Identifier",
+                                                            "name": "arr"
+                                                        },
+                                                        "index": {
+                                                            "type": "BinaryOperation",
+                                                            "operator": "-",
+                                                            "left": {
+                                                                "type": "BinaryOperation",
+                                                                "operator": "-",
+                                                                "left": {
+                                                                    "type": "Identifier",
+                                                                    "name": "n"
+                                                                },
+                                                                "right": {
+                                                                    "type": "NumberLiteral",
+                                                                    "number": "1",
+                                                                    "subdenomination": null
+                                                                }
+                                                            },
+                                                            "right": {
+                                                                "type": "Identifier",
+                                                                "name": "i"
+                                                            }
+                                                        }
+                                                    },
+                                                    "memberName": "voteCount"
+                                                }
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "visibility": "public",
+                    "modifiers": [],
+                    "isConstructor": false,
+                    "isFallback": false,
+                    "isReceive": false,
+                    "stateMutability": "view"
+                }
+            ],
+            "kind": "contract"
+        }
+    ]
+}
