@@ -18,7 +18,7 @@
   - Policy translator
 
 ## How to use EVM-Shield
-Setting Up a Private Chain with Geth and Connecting to Remix. If you want to fully synchronize the mainnet, simply configure mongoDB and change the mask in contract.go to record instead.
+Setting Up a Private Chain with Geth and Connecting to Remix. If you want to fully synchronize the mainnet, simply configure mongoDB and change the shield in contract.go to record instead.
 
 ### 1. Compile Geth from Source
 
