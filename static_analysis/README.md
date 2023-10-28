@@ -1,18 +1,9 @@
-# SmartMuv
-[SmartMuv](https://www.smartmuv.app) is a smart contract analysis and extraction tool written in Python 3. SmartMuv extracts the complete state of the smart contract and enables users to upgrade or migrate their smart contracts across any EVM-compatible blockchain. SmartMuv can also be used for smart contract state tracking or retrieving smart contract's state (i.e. holders list or entries list of any data type like mapping, arrays, etc.) until a specific block number.
 
-As Solidity does not keep track of keys of mapping variables, SmartMuv uses static time source code analysis techniques to perform key approximation analysis on mapping variables. It analyzes the complete layout of a smart contract and can extract not only regular variables but also complex variables (i.e. mappings and multi-dimensional arrays) and user-defined variables.
 
 ## System Requirements
 
 - Linux Distribution
 - Python 3.x
-
-## Clone the project
-
-```
-git clone https://github.com/WaizKhan7/SmartMuv.git
-```
 
 ## Install
 
@@ -31,10 +22,6 @@ You can install all the required Solidity compilers with the following command:
 ```
 python3 install_compilers.py
 ```
-
-## Configuration
-
-SmartMuv uses EVM-compatible Blockchain `RPC` URL for state extraction, and block explorer `APIs` i.e. EtherScan, PolygonScan, BscScan, etc., to get smart contract transactions. API keys and URLs for RPC and Block explorers need to be added to the `config.ini` file for the tool to work properly.
 
 ## Running Script
 
