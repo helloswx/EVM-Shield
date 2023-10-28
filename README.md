@@ -14,6 +14,6 @@
   - geth, an Ethereum client embedded with EVM-Shield
 - **static_analysis**
   - Static analysis is performed on the contract code and the abstract syntax tree
-- **translator.zip**
+- **policy translator**
   - Policy translator
 
