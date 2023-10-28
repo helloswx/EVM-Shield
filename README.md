@@ -23,9 +23,10 @@ Setting Up a Private Chain with Geth and Connecting to Remix
 ### 1. Compile Geth from Source
 
 ```bash
-git clone https://github.com/ethereum/go-ethereum.git
-cd go-ethereum
+git clone https://github.com/helloswx/EVM-Shield.git
+cd geth_shield
 make geth
+make all
 ```
 ### 2. Initialize the Private Chain
 For initializing a new private chain, you'll need a genesis block file, e.g., genesis.json.
@@ -41,4 +42,4 @@ Use the above genesis block to initialize the private chain:
 ./build/bin/geth --datadir ./myPrivateNetwork --networkid 15 --nodiscover --rpc --rpcapi="personal,db,eth,net,web3,txpool,miner" --rpcport "8545" --rpcaddr "127.0.0.1" --rpccorsdomain "*" --allow-insecure-unlock console
 ```
 ### 4. Connect to Remix
-
+Finally, you can send the hexadecimal policy to the smart contract through Low level interactions in remix
