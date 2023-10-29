@@ -116,9 +116,9 @@ type Firewall struct {
 	Vars []int
 }
 type Rule struct {
-	Firewalls []Firewall
-	FocusVars []Variable
-	// CanSendEther bool
+	Firewalls    []Firewall
+	FocusVars    []Variable
+	CanSendEther bool
 }
 
 // Contract represents an ethereum contract in the state database. It contains
