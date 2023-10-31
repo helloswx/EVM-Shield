@@ -19,8 +19,10 @@
 
 ## How to use EVM-Shield
 Setting Up a Private Chain with Geth and Connecting to Remix.
-
 If you want to fully synchronize the mainnet, simply configure mongoDB and change the shield in contract.go to record instead.
+
+We also provide an Ethernet client with the latest version of mongoDB, which allows us to get the control and data flow information of all the transactions through full node synchronization.
+
 
 ### 1. Compile Geth from Source
 
