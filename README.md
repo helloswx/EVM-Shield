@@ -17,10 +17,15 @@
 - **policy translator**
   - Policy translator
 
+
 ## How to use EVM-Shield
-Setting Up a Private Chain with Geth and Connecting to Remix.
 
 If you want to fully synchronize the mainnet, simply configure mongoDB and change the shield in contract.go to record instead.
+
+We also provide an up-to-date version of the ethereum client with built-in mongoDB, which can fetch control flow and data flow information for all transactions.
+Please click [here](https://github.com/BLOCK-GPT-NEW/Txtrace).
+
+## Setting up a private chain with geth and connecting to remix.
 
 ### 1. Compile Geth from Source
 
@@ -44,4 +49,5 @@ Use the above genesis block to initialize the private chain:
 ./build/bin/geth --datadir ./myPrivateNetwork --networkid 15 --nodiscover --rpc --rpcapi="personal,db,eth,net,web3,txpool,miner" --rpcport "8545" --rpcaddr "127.0.0.1" --rpccorsdomain "*" --allow-insecure-unlock console
 ```
 ### 4. Connect to Remix
-Finally, you can send the hexadecimal policy to the smart contract through Low level interactions in remix
+Finally, you can send the hexadecimal policy to the smart contract through Low level interactions in [remix](https://remix.ethereum.org/).
+
