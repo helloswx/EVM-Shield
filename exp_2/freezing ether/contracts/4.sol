@@ -14,5 +14,6 @@ contract FreezingEther5 {
         payable(msg.sender).transfer(address(this).balance);
     }
 
+    //禁用掉此函数防止存钱
     receive() external payable {}
 }
