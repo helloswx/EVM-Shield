@@ -1,6 +1,8 @@
 
 Through Txtrace as the full node, the local private chain or the full synchronization with Ethereum, the opcode and operand sequence of each transaction can be obtained in mongodb, which can be used to evaluate SODA and Aegis.
 
+![image](https://github.com/helloswx/EVM-Shield/assets/52559342/1f6cb417-db4a-4da6-a6e5-ae66caa79979)
+
 
 **For example, a trace fragment of a transaction looks like this:**
 ```
