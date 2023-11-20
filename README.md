@@ -16,8 +16,8 @@
   - Static analysis is performed on the contract code and the abstract syntax tree
 - **policy translator**
   - Policy translator
-- **aegis**
-  - Utilizing [Txtrace](https://github.com/BLOCK-GPT-NEW/Txtrace). to evaluate aegis attack patterns.
+- **baseline**
+  - Utilizing [Txtrace](https://github.com/BLOCK-GPT-NEW/Txtrace). to evaluate soda && aegis attack patterns.
   
 
 
